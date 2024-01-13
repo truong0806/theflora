@@ -1,27 +1,21 @@
-const express = require("express");
-const app = express();
-const dotenv = require("dotenv");
-dotenv.config();
-const morgan = require("morgan");
-const { default: helmet } = require("helmet");
 const compression = require("compression");
+const express = require("express");
+const { default: helmet } = require("helmet");
+const morgan = require("morgan");
+const app = express();
 
-//middleware
+//midelware
 app.use(morgan("dev"));
-// app.use(morgan("combined"))
-
 app.use(helmet());
 app.use(compression());
+const { checkOverLoad } = require("./helpers/check.connect");
+const initRoutes = require("./routers");
+checkOverLoad();
 //database
+require("./dbs/init.mongoosedb").default;
 
 //routes
-app.get("/", (req, res, next) => {
-  const str = "abc";
-  return res.status(200).json({
-    message: "Hello World and Hello from the server side!",
-    data: str.repeat(10000),
-  });
-});
-//error handling
+initRoutes(app);
+//error handler
 
 module.exports = app;

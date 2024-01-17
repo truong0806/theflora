@@ -2,8 +2,11 @@
 
 const shopModel = require("../models/shop.model");
 const bcrypt = require("bcryptjs");
-const { generateKeyPairSync } = require("crypto");
-
+const crypto = require("crypto");
+const KeyTokenService = require("./keyToken.service");
+const { createTokenPair } = require("../auth/authUtils");
+const { getInfoData } = require("../utils");
+const { ForbiddenError } = require("../core/error.response");
 const RoleShop = {
   ADMIN: "000",
   WRITE: "001",
@@ -12,41 +15,124 @@ const RoleShop = {
 };
 
 class AccessService {
-  static async signUp({ name, email, password }) {
+  static signUp = async ({ name, email, password }) => {
     try {
-      const holderShop = await shopModel.find({ email }).lean();
+      const holderShop = await shopModel.findOne({ email }).lean();
       if (holderShop) {
-        return {
-          code: "4001",
-          message: "Email already exists",
-          staus: "error",
-        };
+        throw new ForbiddenError("Email đã tồn tại");
       }
       const hashPassword = await bcrypt.hash(password, 10);
       const newShop = await shopModel.create({
         name,
         email,
         password: hashPassword,
-        rule: [RoleShop.SHOP],
+        roles: [RoleShop.SHOP],
       });
 
       if (newShop) {
-        const { privateKey, publicKey } = await generateKeyPairSync({
-          modulusLength: 4096,
+        const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+          modulusLength: 2048,
+          publicKeyEncoding: {
+            type: "spki",
+            format: "pem",
+          },
+          privateKeyEncoding: {
+            type: "pkcs8",
+            format: "pem",
+          },
         });
-        console.log({ privateKey, publicKey });
+        const keyStore = await KeyTokenService.createKeyToken({
+          userId: newShop._id,
+          publicKey,
+        });
+        if (!keyStore) {
+          throw new ForbiddenError("keyStore error");
+        }
+        const tokens = await createTokenPair(
+          {
+            userId: newShop._id,
+            publicKey,
+          },
+          publicKey,
+          privateKey
+        );
+        return {
+          code: "2001",
+          message: "Sign up successfully",
+          status: "success",
+          data: {
+            tokens,
+            shop: getInfoData({
+              fileds: ["_id", "name", "email"],
+              object: newShop,
+            }),
+          },
+        };
       }
-
-      const token = await user.generateAuthToken();
-      res.status(201).send({ user, token });
     } catch (error) {
       return {
-        code: "4001",
-        message: "Sign up failed",
-        staus: error,
+        status: "error",
+        code: error.statusCode || 500,
+        message: error.message,
       };
     }
-  }
+  };
+
+  static signIn = async ({ email, password }) => {
+    try {
+      const holderShop = await shopModel.findOne({ email }).lean();
+      if (!holderShop) {
+        throw new ForbiddenError("Tài khoản không tồn tại");
+      }
+      const isMatch = await bcrypt.compare(password, holderShop.password);
+      if (isMatch) {
+        const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+          modulusLength: 2048,
+          publicKeyEncoding: {
+            type: "spki",
+            format: "pem",
+          },
+          privateKeyEncoding: {
+            type: "pkcs8",
+            format: "pem",
+          },
+        });
+        const publicKeyString = await KeyTokenService.createKeyToken({
+          userId: holderShop._id,
+          publicKey,
+        });
+        if (!publicKeyString) {
+          throw new ForbiddenError("keyStore error");
+        }
+        const tokens = await createTokenPair(
+          {
+            userId: holderShop._id,
+            publicKey,
+          },
+          publicKey,
+          privateKey
+        );
+        return {
+          code: "2001",
+          message: "Sign in successfully",
+          status: "success",
+          data: {
+            tokens,
+            shop: getInfoData({
+              fileds: ["_id", "name", "email"],
+              object: holderShop,
+            }),
+          },
+        };
+      }
+    } catch (error) {
+      return {
+        status: "error",
+        code: error.statusCode || 500,
+        message: error.message,
+      };
+    }
+  };
 }
 
 module.exports = AccessService;

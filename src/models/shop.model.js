@@ -23,7 +23,6 @@ var shopSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["active", "inactive"],
-      unique: true,
     },
     verify: {
       type: Boolean,
@@ -41,4 +40,4 @@ var shopSchema = new mongoose.Schema(
 );
 
 //Export the model
-module.exports = mongoose.model("ShopModel", shopSchema);
+module.exports = mongoose.model(DOCUMENT_NAME, shopSchema);

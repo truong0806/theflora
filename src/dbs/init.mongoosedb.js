@@ -7,7 +7,6 @@ const {
 } = require("../configs/config");
 
 const connectString = stringConnect;
-console.log(connectString);
 class Database {
   constructor() {
     this.connect();
@@ -18,7 +17,7 @@ class Database {
       mongoose.set("debug", { color: true });
     }
     mongoose
-      .connect(connectString, {
+      .connect(connectString,{
         maxPoolSize: 50,
       })
       .then(() => {

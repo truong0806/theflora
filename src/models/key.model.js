@@ -1,4 +1,4 @@
-const { mongoose, Schema, model } = require("mongoose"); 
+const { mongoose, Schema, model } = require("mongoose");
 const DOCUMENT_NAME = "Key";
 const COLLECTION_NAME = "Keys";
 
@@ -14,7 +14,15 @@ var keyTokenSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    refreshTokenUsed: {
+      type: Array,
+      default: [],
+    },
     refreshToken: {
+      type: String,
+      required: true,
+    },
+    logged: {
       type: Array,
       default: [],
     },

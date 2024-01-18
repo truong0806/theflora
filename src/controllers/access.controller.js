@@ -1,29 +1,38 @@
 "use strict";
-const shopModel = require("../models/shop.model");
 const accessService = require("../services/access.service");
-const { Created } = require("../core/success.response");
+const { Created, Accepted } = require("../core/success.response");
+const { AuthFailureError } = require("../core/error.response");
+const checkIsEmail = require("../helpers/check.isEmail");
 
 class AccessController {
   signUp = async (req, res, next) => {
     const { name, email, password } = req.body;
-    if (!name || !email || !password) throw new Error("Missing input");
+    if (!name || !email || !password || !checkIsEmail(email))
+      throw new AuthFailureError("Check your email or password");
+    if (password.length < 6)
+      throw new AuthFailureError("Password must be at least 6 characters");
     new Created({
-      message: "Sign up success",
       data: await accessService.signUp({ name, email, password }),
+      options: {
+        limit: 10,
+      },
     }).send(res);
   };
-  
+
   signIn = async (req, res, next) => {
     const { email, password } = req.body;
-    try {
-      if (!email || !password)
-        return res.status(400).json({ err: 1, msg: "Missing input" });
-      return res
-        .status(201)
-        .json(await accessService.signIn({ email, password }));
-    } catch (error) {
-      next(error);
-    }
+    const userIp =
+      req.socket.remoteAddress.replace("::ffff:", "") ||
+      req.headers["x-forwarded-for"] ||
+      req.connection.remoteAddress ||
+      "";
+    if (!email || !password || !checkIsEmail(email))
+      throw new AuthFailureError("Check your email or password");
+    if (password.length < 6)
+      throw new AuthFailureError("Password must be at least 6 characters");
+    new Accepted({
+      data: await accessService.signIn({ email, password, userIp }),
+    }).send(res);
   };
 }
 

@@ -4,9 +4,11 @@ const shopModel = require("../models/shop.model");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const KeyTokenService = require("./keyToken.service");
+const { findByEmail } = require("./shop.service");
 const { createTokenPair } = require("../auth/authUtils");
 const { getInfoData } = require("../utils");
-const { ForbiddenError } = require("../core/error.response");
+const { ForbiddenError, AuthFailureError } = require("../core/error.response");
+
 const RoleShop = {
   ADMIN: "000",
   WRITE: "001",
@@ -41,13 +43,13 @@ class AccessService {
             format: "pem",
           },
         });
-        const keyStore = await KeyTokenService.createKeyToken({
-          userId: newShop._id,
-          publicKey,
-        });
-        if (!keyStore) {
-          throw new ForbiddenError("keyStore error");
-        }
+        await KeyTokenService.createKeyToken(
+          {
+            userId: newShop._id,
+            email,
+          },
+          privateKey
+        );
         const tokens = await createTokenPair(
           {
             userId: newShop._id,
@@ -78,53 +80,57 @@ class AccessService {
     }
   };
 
-  static signIn = async ({ email, password }) => {
+  static signIn = async ({ email, password, refeshToken = null, userIp }) => {
     try {
-      const holderShop = await shopModel.findOne({ email }).lean();
-      if (!holderShop) {
-        throw new ForbiddenError("Tài khoản không tồn tại");
+      const foundShop = await findByEmail({ email });
+      if (!foundShop) {
+        throw new ForbiddenError("Shop not found");
       }
-      const isMatch = await bcrypt.compare(password, holderShop.password);
-      if (isMatch) {
-        const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
-          modulusLength: 2048,
-          publicKeyEncoding: {
-            type: "spki",
-            format: "pem",
-          },
-          privateKeyEncoding: {
-            type: "pkcs8",
-            format: "pem",
-          },
-        });
-        const publicKeyString = await KeyTokenService.createKeyToken({
-          userId: holderShop._id,
-          publicKey,
-        });
-        if (!publicKeyString) {
-          throw new ForbiddenError("keyStore error");
-        }
-        const tokens = await createTokenPair(
-          {
-            userId: holderShop._id,
-            publicKey,
-          },
-          publicKey,
-          privateKey
-        );
-        return {
-          code: "2001",
-          message: "Sign in successfully",
-          status: "success",
-          data: {
-            tokens,
-            shop: getInfoData({
-              fileds: ["_id", "name", "email"],
-              object: holderShop,
-            }),
-          },
-        };
+      const isMatch = await bcrypt.compare(password, foundShop.password);
+      if (!isMatch) {
+        throw new AuthFailureError("Password not match");
       }
+      const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+        modulusLength: 2048,
+        publicKeyEncoding: {
+          type: "spki",
+          format: "pem",
+        },
+        privateKeyEncoding: {
+          type: "pkcs8",
+          format: "pem",
+        },
+      });
+      const { _id: userId } = foundShop;
+      const tokens = await createTokenPair(
+        {
+          userId,
+          email,
+        },
+        privateKey
+      );
+      const publicKeyString = await KeyTokenService.createKeyToken({
+        userId,
+        publicKey,
+        refreshToken: tokens.refreshToken,
+        userIp,
+      });
+      if (!publicKeyString) {
+        throw new ForbiddenError("keyStore error");
+      }
+
+      return {
+        code: "2001",
+        message: "Sign in successfully",
+        status: "success",
+        data: {
+          tokens,
+          shop: getInfoData({
+            fileds: ["_id", "name", "email"],
+            object: foundShop,
+          }),
+        },
+      };
     } catch (error) {
       return {
         status: "error",

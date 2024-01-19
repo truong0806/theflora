@@ -1,5 +1,6 @@
 "use strict";
 
+const { Types } = require("mongoose");
 const { ForbiddenError } = require("../core/error.response");
 const keyTokenModel = require("../models/key.model");
 const moment = require("moment");
@@ -10,16 +11,11 @@ class KeyTokenService {
     refreshToken,
     userIp,
   }) => {
-    console.log("🚀 ~ KeyTokenService ~ refreshToken:", refreshToken);
     try {
       const filter = { user: userId };
       const update = {
         publicKey,
         $push: {
-          refreshTokenUsed: {
-            $each: [refreshToken],
-            $slice: -3,
-          },
           logged: {
             $each: [
               `${moment(new Date()).format("DD/MM/YYYY")},${moment(
@@ -41,6 +37,55 @@ class KeyTokenService {
     } catch (error) {
       throw new ForbiddenError("keyStore error");
     }
+  };
+  static findPublicKeyByUserId = async (userId) => {
+    const objKey = await keyTokenModel
+      .findOne({ user: new Types.ObjectId(userId) })
+      .lean();
+    if (!objKey) throw new ForbiddenError("keyStore error");
+    return objKey;
+  };
+  static removeKeyTokenByUserId = async (userId) => {
+    const objKey = await keyTokenModel
+      .findOneAndDelete({ user: new Types.ObjectId(userId) })
+      .lean();
+    console.log(
+      "🚀 ~ KeyTokenService ~ removeKeyTokenByUserId= ~ objKey:",
+      objKey
+    );
+    return objKey;
+  };
+  static findByRefreshTokenUsed = async (refreshToken) => {
+    console.log(
+      "🚀 ~ KeyTokenService ~ findByRefreshTokenUsed= ~ refreshToken:",
+      refreshToken
+    );
+    return await keyTokenModel
+      .findOne({ refreshTokenUsed: refreshToken })
+      .lean();
+  };
+  static findByRefreshToken = async (refreshToken) => {
+    return await keyTokenModel.findOne({ refreshToken });
+  };
+  static updateKeyToken = async ({
+    userId,
+    tokens,
+    publicKey,
+    refreshToken,
+  }) => {
+    const filter = { user: userId };
+    const update = {
+      publicKey,
+      $push: {
+        refreshTokenUsed: {
+          $each: [refreshToken],
+          $slice: -3,
+        },
+      },
+      refreshToken: tokens.refreshToken,
+    };
+    const options = { upsert: true, new: true };
+    return await keyTokenModel.findOneAndUpdate(filter, update, options);
   };
 }
 

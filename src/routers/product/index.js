@@ -10,6 +10,10 @@ routes.get("/all", asyncHandler(productController.getAllProduct));
 routes.use(apiKey);
 routes.use(permission(process.env.PERMISSION_USER));
 routes.use(authentication);
+routes.get(
+  "/drafts/all",
+  asyncHandler(productController.getProductDraftByShop)
+);
 routes.post("/create", asyncHandler(productController.createProduct));
 
 module.exports = routes;

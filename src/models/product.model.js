@@ -1,9 +1,10 @@
 const { mongoose, Schema } = require("mongoose"); // Erase if already required
+const slug = require("slugify");
 const DOCUMENT_NAME = "Product";
 const COLLECTION_NAME = "Products";
 
 // Declare the Schema of the Mongo model
-var userSchema = new mongoose.Schema(
+var productSchema = new mongoose.Schema(
   {
     product_name: {
       type: String,
@@ -53,12 +54,41 @@ var userSchema = new mongoose.Schema(
       type: Schema.Types.Mixed,
       required: true,
     },
+    product_slug: {
+      type: String,
+    },
+    product_ratingsAverage: {
+      type: Number,
+      default: 4.3,
+      min: [1, "Rating must be above 1.0"],
+      max: [5, "Rating must be below 5.0"],
+    },
+    product_variations: {
+      type: Array,
+      default: [],
+    },
+    isDraft: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
+    isPublished: {
+      type: Boolean,
+      default: false,
+      selection: false,
+      index: true,
+    },
   },
   {
     collection: COLLECTION_NAME,
     timestamps: true,
   }
 );
+//middleware
+productSchema.pre("save", function (next) {
+  this.product_slug = slug(this.product_name, { lower: true });
+  next();
+});
 
 var clothingSchema = new mongoose.Schema(
   {
@@ -81,8 +111,8 @@ var electricSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    model: String,
-    color: String,
+    model: Array,
+    color: Array,
   },
   {
     collection: "electronics",
@@ -92,7 +122,7 @@ var electricSchema = new mongoose.Schema(
 
 //Export the model
 module.exports = {
-  product: mongoose.model(DOCUMENT_NAME, userSchema),
+  product: mongoose.model(DOCUMENT_NAME, productSchema),
   clothing: mongoose.model("Clothing", clothingSchema),
   electric: mongoose.model("Electronics", electricSchema),
 };

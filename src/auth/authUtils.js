@@ -2,7 +2,7 @@
 
 const JWT = require("jsonwebtoken");
 const crypto = require("node:crypto");
-const { ForbiddenError } = require("../core/error.response");
+
 const createTokenPair = async (payload, privateKey) => {
   try {
     // accessToken
@@ -24,14 +24,16 @@ const createTokenPair = async (payload, privateKey) => {
     //   }
     // });
     return { accessToken, refreshToken };
-  } catch (error) {}
+  } catch (error) {
+    console.log("🚀 ~ createTokenPair ~ error:", error);
+  }
 };
 const JWTVerify = (token, publicKey) => {
   try {
     const decode = JWT.verify(token, publicKey);
     return decode;
   } catch (error) {
-    throw new ForbiddenError("Something went wrong, please login again");
+    return null;
   }
 };
 const generateKeyPairSync = () => {

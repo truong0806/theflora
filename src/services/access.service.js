@@ -88,7 +88,6 @@ class AccessService {
   };
 
   static signIn = async ({ email, password, refeshToken = null, userIp }) => {
-    console.log("🚀 ~ AccessService ~ signIn= ~ userIp:", userIp);
     try {
       const foundShop = await findByEmail({ email });
       if (!foundShop) {
@@ -138,8 +137,9 @@ class AccessService {
     }
   };
 
-  static signOut = async ({ userId }) => {
-    const delKey = await KeyTokenService.removeKeyTokenByUserId(userId);
+  static signOut = async (user) => {
+    console.log("🚀 ~ AccessService ~ signOut= ~ userId:", user.userId);
+    const delKey = await KeyTokenService.removeKeyTokenByUserId(user.userId);
     if (!delKey) {
       throw new ForbiddenError("keyStore error");
     }
@@ -150,28 +150,16 @@ class AccessService {
     };
   };
 
-  static handlerRefeshToken = async ({ refreshToken }) => {
-    const keyToken = await KeyTokenService.findByRefreshTokenUsed(refreshToken);
-    console.log(
-      "🚀 ~ AccessService ~ handlerRefeshToken= ~ keyToken:",
-      keyToken
-    );
-    if (keyToken) {
-      const { user } = keyToken;
-      await KeyTokenService.removeKeyTokenByUserId(user);
+  static handlerRefeshTokenV2 = async ({ refreshToken, user, keyStore }) => {
+    console.log("🚀 ~ AccessService ~ handlerRefeshTokenV2= ~ user:", user);
+    const { userId, email } = user;
+    if (keyStore.refreshTokenUsed.includes(refreshToken)) {
+      await KeyTokenService.removeKeyTokenByUserId(userId);
       throw new ForbiddenError("Something went wrong, please login again");
     }
-    const holderResfreshToken = await KeyTokenService.findByRefreshToken(
-      refreshToken
-    );
-    if (!holderResfreshToken) {
-      throw new AuthFailureError("Shop not found");
+    if (keyStore.refreshToken !== refreshToken) {
+      throw new ForbiddenError("Something went wrong, please login again 1");
     }
-    const decode = JWTVerify(refreshToken, holderResfreshToken.publicKey);
-    if (!decode) {
-      throw new AuthFailureError("Authentication error");
-    }
-    const { userId, email } = decode;
     const foundShop = await findByEmail({ email });
     if (!foundShop) {
       throw new ForbiddenError("Shop not found");
@@ -198,10 +186,7 @@ class AccessService {
       status: "success",
       data: {
         tokens,
-        shop: getInfoData({
-          fileds: ["_id", "name", "email"],
-          object: foundShop,
-        }),
+        user,
       },
     };
   };

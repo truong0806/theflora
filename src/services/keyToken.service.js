@@ -49,17 +49,9 @@ class KeyTokenService {
     const objKey = await keyTokenModel
       .findOneAndDelete({ user: new Types.ObjectId(userId) })
       .lean();
-    console.log(
-      "🚀 ~ KeyTokenService ~ removeKeyTokenByUserId= ~ objKey:",
-      objKey
-    );
     return objKey;
   };
   static findByRefreshTokenUsed = async (refreshToken) => {
-    console.log(
-      "🚀 ~ KeyTokenService ~ findByRefreshTokenUsed= ~ refreshToken:",
-      refreshToken
-    );
     return await keyTokenModel
       .findOne({ refreshTokenUsed: refreshToken })
       .lean();

@@ -6,7 +6,7 @@ const { validateFields } = require("../helpers/validate");
 
 class AccessController {
   signUp = async (req, res, next) => {
-    validateFields(req.body);
+    validateFields("access", req.body);
     new Created({
       data: await accessService.signUp(req.body),
       options: {
@@ -16,7 +16,7 @@ class AccessController {
   };
 
   signIn = async (req, res, next) => {
-    validateFields({ email: req.body.email });
+    validateFields("access", { email: req.body.email });
     if (!req.body.password) throw new AuthFailureError("Password is invalid");
     new Accepted({
       data: await accessService.signIn(req.body),
@@ -25,12 +25,16 @@ class AccessController {
 
   signOut = async (req, res, next) => {
     new Accepted({
-      data: await accessService.signOut(req.keyStore),
+      data: await accessService.signOut(req.user),
     }).send(res);
   };
-  handlerRefeshToken = async (req, res, next) => {
+  handlerRefeshTokenV2 = async (req, res, next) => {
     new Accepted({
-      data: await accessService.handlerRefeshToken(req.body),
+      data: await accessService.handlerRefeshTokenV2({
+        refreshToken: req.refreshToken,
+        user: req.user,
+        keyStore: req.keyStore,
+      }),
     }).send(res);
   };
 }

@@ -19,8 +19,13 @@ class SuccessResponse {
 }
 
 class OK extends SuccessResponse {
-  constructor({ message, data }) {
-    super(message, data);
+  constructor({
+    message,
+    statusCode = StatusCodes.OK,
+    reasonStatusCode = ReasonPhrases.OK,
+    data,
+  }) {
+    super(message, statusCode, reasonStatusCode, data);
   }
 }
 class Created extends SuccessResponse {

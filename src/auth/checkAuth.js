@@ -64,7 +64,6 @@ const permission = (permission) => {
 };
 const authenticationV2 = asyncHandler(async (req, res, next) => {
   const userId = req.headers[HEADER.CLIENT_ID]?.toString();
-  console.log("🚀 ~ authenticationV2 ~ userId:", userId);
   if (!userId) {
     throw new AuthFailureError("Authentication error");
   }
@@ -81,7 +80,6 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
   try {
     const refreshToken = req.headers[HEADER.REFRESHTOKEN]?.toString();
     const decodeUser = JWTVerify(refreshToken, keyStore.publicKey);
-    console.log("🚀 ~ authenticationV2 ~ decodeUser:", decodeUser);
     if (!decodeUser) {
       await KeyTokenService.removeKeyTokenByUserId(userId);
       throw new AuthFailureError("Something went wrong, please login again");
@@ -99,7 +97,6 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
 });
 const authentication = asyncHandler(async (req, res, next) => {
   const userId = req.headers[HEADER.CLIENT_ID]?.toString();
-  console.log("🚀 ~ authentication ~ userId:", userId);
   if (!userId) {
     throw new AuthFailureError("Authentication error");
   }
@@ -113,11 +110,8 @@ const authentication = asyncHandler(async (req, res, next) => {
   if (!keyStore) {
     throw new NotFoundError("KeyStore not found");
   }
-  console.log("🚀 ~ authentication ~ keyStore:", keyStore);
   try {
     const decode = JWTVerify(token, keyStore.publicKey);
-    console.log("🚀 ~ authentication ~ decode:", decode);
-    //const decode = JWT.verify(token, keyStore.publicKey);
     if (!decode) {
       throw new AuthFailureError("Authentication error");
     }

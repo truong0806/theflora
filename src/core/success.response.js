@@ -50,9 +50,20 @@ class Accepted extends SuccessResponse {
     super(message, statusCode, reasonStatusCode, data);
   }
 }
+class Updated extends SuccessResponse {
+  constructor({
+    message,
+    statusCode = StatusCodes.OK,
+    reasonStatusCode = ReasonPhrases.OK,
+    data,
+  }) {
+    super(message, statusCode, reasonStatusCode, data);
+  }
+}
 
 module.exports = {
   OK,
   Created,
   Accepted,
+  Updated,
 };

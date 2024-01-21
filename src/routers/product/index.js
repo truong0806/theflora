@@ -14,6 +14,11 @@ routes.get(
   "/drafts/all",
   asyncHandler(productController.getProductDraftByShop)
 );
+routes.put("/changestatus", asyncHandler(productController.changeStatusProductByShop));
+routes.get(
+  "/publish/all",
+  asyncHandler(productController.getAllProductPublishByShop)
+);
 routes.post("/create", asyncHandler(productController.createProduct));
 
 module.exports = routes;

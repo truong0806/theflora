@@ -71,6 +71,7 @@ var productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
       index: true,
+      selection: false,
     },
     isPublished: {
       type: Boolean,
@@ -115,7 +116,7 @@ var electricSchema = new mongoose.Schema(
     color: Array,
   },
   {
-    collection: "electronics",
+    collection: "Electronics",
     timestamps: true,
   }
 );

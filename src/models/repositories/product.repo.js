@@ -2,28 +2,45 @@
 
 const { Types } = require("mongoose");
 const { product } = require("../product.model");
+const { filter, update } = require("lodash");
 
-const findProductDraftsForShop = async (product_shop,{ query, limit, skip }) => {
+const findProductDraftsForShop = async ({ query, limit, skip }) => {
   const foundProduct = await product
-    .find({product_shop: new Types.ObjectId(product_shop), query})
+    .find(query)
     .populate("product_shop", "name email -_id")
     .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit)
     .lean()
     .exec();
-  console.log("🚀 ~ findProductDraftsForShop ~ foundProduct:", foundProduct);
-  return await product;
+  return await foundProduct;
 };
-const publishProductByyShop = async ({ product_shop, product_id }) => {
-  const foundShop = await product.findOne({
-    product_shop: new Types.ObjectId(product_shop),
-    _id: Types.ObjectId(product_id),
-  });
-  (foundShop.isDraft = false), (foundShop.isPublished = true);
+const findProductPublishForShop = async ({ query, limit, skip }) => {
+  const foundProduct = await product
+    .find(query)
+    .populate("product_shop", "name email -_id")
+    .sort({ updatedAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .lean()
+    .exec();
+  return await foundProduct;
+};
+
+const changeStatusProductShop = async ({ product_shop, product_id }) => {
+  const filter = { product_shop, _id: product_id };
+  const foundProduct = await product.findOne(filter);
+  if (!foundProduct) {
+    throw new BadRequestError("Product not found");
+  }
+  foundProduct.isDraft = !foundProduct.isDraft;
+  foundProduct.isPublished = !foundProduct.isPublished;
+  const updatedProduct = await foundProduct.save();
+  return updatedProduct;
 };
 
 module.exports = {
   findProductDraftsForShop,
-  publishProductByyShop,
+  changeStatusProductShop,
+  findProductPublishForShop,
 };

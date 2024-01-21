@@ -2,7 +2,10 @@ const { product, clothing, electric } = require("../models/product.model");
 const { BadRequestError, ForbiddenError } = require("../core/error.response");
 const {
   findProductDraftsForShop,
+  changeStatusProductShop,
+  findProductPublishForShop,
 } = require("../models/repositories/product.repo");
+const { Accepted } = require("../core/success.response");
 
 class ProductFactory {
   static productRegistry = {};
@@ -20,23 +23,43 @@ class ProductFactory {
   }
 
   static async getAllProduct() {
-    const products = await product.find({}).exec();
+    const products = await product
+      .find({ product_type: "Clothing" })
+      .populate("product_shop", "name email _id")
+      .sort({ updatedAt: -1 })
+      .skip(0)
+      .limit(50)
+      .lean()
+      .exec();
     const count = products.length;
     if (!products) {
       throw new BadRequestError("Get all product failed");
     }
     return { count, products };
   }
-  static async getAllProductByShop(product_shop,{ limit = 50, skip = 0 }) {
-    const query = { product_shop, isDraft: false };
+  static async findProductDraftsForShop({ product_shop }) {
+    const limit = 50;
+    const skip = 0;
+    const query = { product_shop, isDraft: true, isPublished: false };
     return await findProductDraftsForShop({ query, limit, skip });
   }
-
-  static async getAllProductByType(type) {
-    return await product.find({ product_type: type });
+  static async findProductPublishForShop({ product_shop }) {
+    const limit = 50;
+    const skip = 0;
+    const query = { product_shop, isDraft: false, isPublished: true };
+    return await findProductPublishForShop({ query, limit, skip });
   }
+
   static async getProductById(id) {
     return await product.findById(id);
+  }
+  static async changeStatusProductShop({ product_shop, product_id }) {
+    const updated = await changeStatusProductShop({ product_shop, product_id });
+    if (!updated) {
+      throw new BadRequestError("Publish product failed");
+    } else {
+      return updated;
+    }
   }
 }
 class Product {

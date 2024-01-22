@@ -1,5 +1,6 @@
 const { mongoose, Schema } = require("mongoose"); // Erase if already required
-const slug = require("slugify");
+const slug = require("slug");
+const uniqueSlug = require("unique-slug");
 const DOCUMENT_NAME = "Product";
 const COLLECTION_NAME = "Products";
 
@@ -85,9 +86,18 @@ var productSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+productSchema.index({ product_name: "text" }, { product_description: "text" });
 //middleware
-productSchema.pre("save", function (next) {
+productSchema.pre("save", async function (next) {
   this.product_slug = slug(this.product_name, { lower: true });
+  const slugMatch = await this.constructor.find({
+    product_slug: this.product_slug,
+  });
+  if (this.isNew && slugMatch.length > 0) {
+    const uniqueId = uniqueSlug();
+    this.product_slug = `${this.product_slug}-${uniqueId}`;
+  }
+
   next();
 });
 

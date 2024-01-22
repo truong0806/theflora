@@ -25,7 +25,8 @@
     "mongoose": "^8.0.4",
     "morgan": "^1.10.0",
     "rotating-file-stream": "^3.2.1",
-    "slugify": "^1.6.6"
+    "slug": "^8.2.3",
+    "unique-slug": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

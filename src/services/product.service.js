@@ -1,11 +1,13 @@
 const { product, clothing, electric } = require("../models/product.model");
-const { BadRequestError, ForbiddenError } = require("../core/error.response");
+const { BadRequestError } = require("../core/error.response");
 const {
-  findProductDraftsForShop,
+  findProductShopByStatus,
   changeStatusProductShop,
-  findProductPublishForShop,
+  findAllProducts,
+  findProductById,
+  findProductBySlug,
+  searchProductByKeySearch,
 } = require("../models/repositories/product.repo");
-const { Accepted } = require("../core/success.response");
 
 class ProductFactory {
   static productRegistry = {};
@@ -22,26 +24,29 @@ class ProductFactory {
     return await new productClass(payload).createProduct();
   }
 
-  static async getAllProduct() {
-    const products = await product
-      .find({ product_type: "Clothing" })
-      .populate("product_shop", "name email _id")
-      .sort({ updatedAt: -1 })
-      .skip(0)
-      .limit(50)
-      .lean()
-      .exec();
-    const count = products.length;
-    if (!products) {
-      throw new BadRequestError("Get all product failed");
-    }
-    return { count, products };
+  static async findAllProduct({
+    limit = 50,
+    sort = "ctime",
+    page = 1,
+    filter = { isPublished: true },
+  }) {
+    return await findAllProducts({
+      limit,
+      sort,
+      page,
+      filter,
+      select: ["product_name", "product_price", "product_thumb"],
+    });
   }
-  static async findProductDraftsForShop({ product_shop }) {
+  static async findProductShopByStatus({ status, product_shop }) {
     const limit = 50;
     const skip = 0;
-    const query = { product_shop, isDraft: true, isPublished: false };
-    return await findProductDraftsForShop({ query, limit, skip });
+    const query = {
+      product_shop,
+      isDraft: status === "draft",
+      isPublished: status === "published",
+    };
+    return await findProductShopByStatus({ query, limit, skip });
   }
   static async findProductPublishForShop({ product_shop }) {
     const limit = 50;
@@ -50,8 +55,28 @@ class ProductFactory {
     return await findProductPublishForShop({ query, limit, skip });
   }
 
-  static async getProductById(id) {
-    return await product.findById(id);
+  static async findProductById({ product_id, roles }) {
+    console.log("🚀 ~ ProductFactory ~ findProductById ~ product_id:", product_id)
+    return await findProductById({
+      product_id,
+      roles,
+      unselect: ["product_shop"],
+    });
+  }
+  static async findProductBySlug({ slug, roles }) {
+    console.log("🚀 ~ ProductFactory ~ findProductById ~ product_id:", slug)
+    return await findProductBySlug({
+      slug,
+      roles,
+      unselect: ["product_shop"],
+    });
+  }
+  static async searchProductByKeySearch({ keySearch }) {
+    console.log(
+      "🚀 ~ ProductFactory ~ searchProductByKeySearch ~ keySearch:",
+      keySearch
+    );
+    return await searchProductByKeySearch({ keySearch });
   }
   static async changeStatusProductShop({ product_shop, product_id }) {
     const updated = await changeStatusProductShop({ product_shop, product_id });
@@ -62,6 +87,7 @@ class ProductFactory {
     }
   }
 }
+
 class Product {
   constructor({
     product_name,

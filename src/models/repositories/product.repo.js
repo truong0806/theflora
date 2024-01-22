@@ -1,10 +1,10 @@
 "use strict";
 
-const { Types } = require("mongoose");
+const { getSelectData, unSelectData } = require("../../utils");
 const { product } = require("../product.model");
-const { filter, update } = require("lodash");
+const { Types } = require("mongoose");
 
-const findProductDraftsForShop = async ({ query, limit, skip }) => {
+const findProductShopByStatus = async ({ query, limit, skip }) => {
   const foundProduct = await product
     .find(query)
     .populate("product_shop", "name email -_id")
@@ -15,15 +15,73 @@ const findProductDraftsForShop = async ({ query, limit, skip }) => {
     .exec();
   return await foundProduct;
 };
-const findProductPublishForShop = async ({ query, limit, skip }) => {
+const findAllProducts = async ({ limit, sort, page, filter, select }) => {
+  console.log("🚀 ~ findAllProducts ~ limit:", limit);
+  const skip = (page - 1) * limit;
+  const sortBy = sort === "ctime" ? { _id: -1 } : { _id: 1 };
   const foundProduct = await product
-    .find(query)
+    .find(filter)
     .populate("product_shop", "name email -_id")
-    .sort({ updatedAt: -1 })
+    .sort(sortBy)
     .skip(skip)
     .limit(limit)
-    .lean()
-    .exec();
+    .select(getSelectData(select))
+    .lean();
+  const count = await foundProduct.length;
+  return { count, foundProduct };
+};
+const findProductById = async ({ product_id, roles, unselect }) => {
+  console.log("🚀 ~ findProductById ~ product_id:", product_id);
+  const isAdmin = roles.includes(process.env.PERMISSION_ADMIN);
+  const o_id = new Types.ObjectId(product_id);
+  if (isAdmin) {
+    const foundProduct = await product
+      .find({ _id: o_id })
+      .select(unSelectData(unselect))
+      .lean();
+    console.log("🚀 ~ findProductById ~ foundProduct:", foundProduct);
+    return foundProduct;
+  } else {
+    const filter = { _id: o_id, isPublished: true, isDraft: false };
+    const foundProduct = await product
+      .find(filter)
+      .select(unSelectData(unselect))
+      .lean();
+    return foundProduct;
+  }
+};
+const findProductBySlug = async ({ slug, roles, unselect }) => {
+  console.log("🚀 ~ findProductBySlug ~ slug:", slug);
+  const isAdmin = roles.includes(process.env.PERMISSION_ADMIN);
+  if (isAdmin) {
+    const foundProduct = await product
+      .find({ product_slug: slug })
+      .select(unSelectData(unselect))
+      .lean();
+    console.log("🚀 ~ findProductById ~ foundProduct:", foundProduct);
+    return foundProduct;
+  } else {
+    const filter = { product_slug: slug, isPublished: true, isDraft: false };
+    const foundProduct = await product
+      .find(filter)
+      .select(unSelectData(unselect))
+      .lean();
+    return foundProduct;
+  }
+};
+const searchProductByKeySearch = async ({ keySearch }) => {
+  const regexSearch = RegExp(keySearch);
+  const foundProduct = await product
+    .find(
+      {
+        isDraft: false,
+        isPublished: true,
+        $text: { $search: regexSearch },
+      },
+      { score: { $meta: "textScore" } }
+    )
+    .sort({ score: { $meta: "textScore" } })
+    .lean();
   return await foundProduct;
 };
 
@@ -40,7 +98,10 @@ const changeStatusProductShop = async ({ product_shop, product_id }) => {
 };
 
 module.exports = {
-  findProductDraftsForShop,
+  findProductShopByStatus,
   changeStatusProductShop,
-  findProductPublishForShop,
+  searchProductByKeySearch,
+  findAllProducts,
+  findProductById,
+  findProductBySlug,
 };

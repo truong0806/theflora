@@ -7,6 +7,7 @@ const {
   findProductById,
   findProductBySlug,
   searchProductByKeySearch,
+  updateProductById,
 } = require("../models/repositories/product.repo");
 
 class ProductFactory {
@@ -112,6 +113,9 @@ class Product {
   }
   async createProduct(product_id) {
     return await product.create({ ...this, _id: product_id });
+  }
+  async updateProduct({product_id,bodyUpdate}) {
+    return await updateProductById(product_id, bodyUpdate{ isNew=true });
   }
 }
 class Clothing extends Product {

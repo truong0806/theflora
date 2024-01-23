@@ -96,6 +96,16 @@ const changeStatusProductShop = async ({ product_shop, product_id }) => {
   const updatedProduct = await foundProduct.save();
   return updatedProduct;
 };
+const updateProductById = async ({
+  product_id,
+  bodyUpdate,
+  model,
+  isNew = true,
+}) => {
+  return await model.findByIdAndUpdate(product_id, bodyUpdate, {
+    new: isNew,
+  });
+};
 
 module.exports = {
   findProductShopByStatus,
@@ -104,4 +114,5 @@ module.exports = {
   findAllProducts,
   findProductById,
   findProductBySlug,
+  updateProductById,
 };

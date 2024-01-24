@@ -35,7 +35,7 @@ class ProductController {
   getProductBySlug = async (req, res, next) => {
     const roles = req.objKey.permissions;
     const slug = req.params.slug;
-    console.log("🚀 ~ ProductController ~ getProductBySlug= ~ slug:", slug)
+    console.log("🚀 ~ ProductController ~ getProductBySlug= ~ slug:", slug);
     const response = await productService.findProductBySlug({
       slug,
       roles,
@@ -77,6 +77,19 @@ class ProductController {
     new OK({
       message: "Search product successfully",
       data: await productService.searchProductByKeySearch(keySearch),
+    }).send(res);
+  };
+  updateProductById = async (req, res, next) => {
+    new OK({
+      message: "Update product successfully",
+      data: await productService.updateProduct(
+        req.body.product_type,
+        req.params.productId,
+        {
+          ...req.body,
+          product_shop: req.user.userId,
+        }
+      ),
     }).send(res);
   };
 }

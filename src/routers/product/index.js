@@ -27,5 +27,6 @@ routes.put(
   asyncHandler(productController.changeStatusProductByShop)
 );
 routes.get("/:status/all", asyncHandler(productController.getProductByStatus));
+routes.patch("/update/:productId", asyncHandler(productController.updateProductById));
 
 module.exports = routes;

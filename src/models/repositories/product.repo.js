@@ -1,5 +1,6 @@
 "use strict";
 
+const { asyncHandler } = require("../../helpers/asyncHandler");
 const { getSelectData, unSelectData } = require("../../utils");
 const { product } = require("../product.model");
 const { Types } = require("mongoose");
@@ -96,16 +97,14 @@ const changeStatusProductShop = async ({ product_shop, product_id }) => {
   const updatedProduct = await foundProduct.save();
   return updatedProduct;
 };
-const updateProductById = async ({
-  product_id,
-  bodyUpdate,
-  model,
-  isNew = true,
-}) => {
-  return await model.findByIdAndUpdate(product_id, bodyUpdate, {
+const updateProductById = async ({ productId, bodyUpdate, model, isNew }) => {
+  console.log("🚀 ~ product_id:", productId);
+  const update = await model.findByIdAndUpdate(productId, bodyUpdate, {
     new: isNew,
   });
+  return update;
 };
+
 
 module.exports = {
   findProductShopByStatus,

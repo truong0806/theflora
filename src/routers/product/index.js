@@ -2,8 +2,8 @@
 
 const express = require("express");
 const productController = require("../../controllers/product.controller");
-const { apiKey, permission, authentication } = require("../../auth/checkAuth");
 const routes = express.Router();
+const { apiKey, permission, authentication } = require("../../auth/checkAuth");
 const { asyncHandler } = require("../../helpers/asyncHandler");
 
 routes.use(apiKey);

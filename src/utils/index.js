@@ -1,5 +1,9 @@
 const _ = require("lodash");
+const { Types } = require("mongoose");
 
+const convertToObjectId = (id) => {
+  return new Types.ObjectId(id);
+};
 const getInfoData = ({ fileds = [], object = {} }) => {
   return _.pick(object, fileds);
 };
@@ -19,7 +23,7 @@ const removeUndefined = (obj) => {
   return obj;
 };
 const updateNestedObjectParse = (obj) => {
-  console.log("🚀 ~ updateNestedObjectParse ~ obj:", obj)
+  console.log("🚀 ~ updateNestedObjectParse ~ obj:", obj);
   const final = {};
   Object.keys(obj).forEach((k) => {
     if (typeof obj[k] === "object" && !Array.isArray(obj[k])) {
@@ -43,4 +47,5 @@ module.exports = {
   unSelectData,
   getSelectData,
   removeUndefined,
+  convertToObjectId,
 };

@@ -1,6 +1,7 @@
 "use strict";
 
 const express = require("express");
+const routes = express.Router();
 const accessController = require("../../controllers/access.controller");
 const {
   apiKey,
@@ -8,7 +9,7 @@ const {
   authentication,
   authenticationV2,
 } = require("../../auth/checkAuth");
-const routes = express.Router();
+
 const { asyncHandler } = require("../../helpers/asyncHandler");
 const { createapikey } = require("../../services/apikey.service");
 

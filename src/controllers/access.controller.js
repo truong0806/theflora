@@ -2,7 +2,7 @@
 const accessService = require("../services/access.service");
 const { Created, Accepted } = require("../core/success.response");
 const { AuthFailureError } = require("../core/error.response");
-const { validateFields } = require("../helpers/validate");
+const  validateFields  = require("../helpers/validate");
 
 class AccessController {
   signUp = async (req, res, next) => {

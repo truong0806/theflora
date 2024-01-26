@@ -18,7 +18,7 @@ const findAllDiscountCode = async ({
   const count = await foundDiscount.length;
   return { count, foundDiscount };
 };
-const findDiscountByCode = async ( code, shopId ) => {
+const findDiscountByCode = async (code, shopId) => {
   const foundDiscount = await discountModel
     .findOne({
       discount_code: code,

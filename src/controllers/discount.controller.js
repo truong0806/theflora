@@ -12,6 +12,7 @@ class DiscountController {
   delete = async (req, res, next) => {
     const shopId = req.user.userId;
     const { code } = req.body;
+    console.log("🚀 ~ DiscountController ~ delete ~ code:", code)
     validateFields("discount", req.body);
     new OK({
       data: await discountService.deleteDiscountCode(code, shopId),
@@ -37,7 +38,13 @@ class DiscountController {
   applyDiscount = async (req, res, next) => {
     validateFields("discount", req.body);
     new OK({
-      data: await discountService.getDiscountAmount(req.body),
+      data: await discountService.applyDiscountCode(req.body),
+    }).send(res);
+  };
+  cancelDiscount = async (req, res, next) => {
+    validateFields("discount", req.body);
+    new OK({
+      data: await discountService.cancelDiscountCode(req.body),
     }).send(res);
   };
 }

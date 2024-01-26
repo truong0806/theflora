@@ -19,8 +19,13 @@ class SuccessResponse {
 }
 
 class OK extends SuccessResponse {
-  constructor({ message, data }) {
-    super(message, data);
+  constructor({
+    message,
+    statusCode = StatusCodes.OK,
+    reasonStatusCode = ReasonPhrases.OK,
+    data,
+  }) {
+    super(message, statusCode, reasonStatusCode, data);
   }
 }
 class Created extends SuccessResponse {
@@ -45,9 +50,20 @@ class Accepted extends SuccessResponse {
     super(message, statusCode, reasonStatusCode, data);
   }
 }
+class Updated extends SuccessResponse {
+  constructor({
+    message,
+    statusCode = StatusCodes.OK,
+    reasonStatusCode = ReasonPhrases.OK,
+    data,
+  }) {
+    super(message, statusCode, reasonStatusCode, data);
+  }
+}
 
 module.exports = {
   OK,
   Created,
   Accepted,
+  Updated,
 };

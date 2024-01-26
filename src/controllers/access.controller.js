@@ -2,17 +2,13 @@
 const accessService = require("../services/access.service");
 const { Created, Accepted } = require("../core/success.response");
 const { AuthFailureError } = require("../core/error.response");
-const checkIsEmail = require("../helpers/check.isEmail");
+const  validateFields  = require("../helpers/validate");
 
 class AccessController {
   signUp = async (req, res, next) => {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password || !checkIsEmail(email))
-      throw new AuthFailureError("Check your email or password");
-    if (password.length < 6)
-      throw new AuthFailureError("Password must be at least 6 characters");
+    validateFields("access", req.body);
     new Created({
-      data: await accessService.signUp({ name, email, password }),
+      data: await accessService.signUp(req.body),
       options: {
         limit: 10,
       },
@@ -20,18 +16,25 @@ class AccessController {
   };
 
   signIn = async (req, res, next) => {
-    const { email, password } = req.body;
-    const userIp =
-      req.socket.remoteAddress.replace("::ffff:", "") ||
-      req.headers["x-forwarded-for"] ||
-      req.connection.remoteAddress ||
-      "";
-    if (!email || !password || !checkIsEmail(email))
-      throw new AuthFailureError("Check your email or password");
-    if (password.length < 6)
-      throw new AuthFailureError("Password must be at least 6 characters");
+    validateFields("access", { email: req.body.email });
+    if (!req.body.password) throw new AuthFailureError("Password is invalid");
     new Accepted({
-      data: await accessService.signIn({ email, password, userIp }),
+      data: await accessService.signIn(req.body),
+    }).send(res);
+  };
+
+  signOut = async (req, res, next) => {
+    new Accepted({
+      data: await accessService.signOut(req.user),
+    }).send(res);
+  };
+  handlerRefeshTokenV2 = async (req, res, next) => {
+    new Accepted({
+      data: await accessService.handlerRefeshTokenV2({
+        refreshToken: req.refreshToken,
+        user: req.user,
+        keyStore: req.keyStore,
+      }),
     }).send(res);
   };
 }

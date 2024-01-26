@@ -64,6 +64,7 @@ const permission = (permission) => {
 };
 const authenticationV2 = asyncHandler(async (req, res, next) => {
   const userId = req.headers[HEADER.CLIENT_ID]?.toString();
+  console.log("🚀 ~ authenticationV2 ~ userId:", userId)
   if (!userId) {
     throw new AuthFailureError("Authentication error");
   }
@@ -88,6 +89,7 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
       throw new AuthFailureError("Authentication error");
     }
     req.keyStore = keyStore;
+    console.log("🚀 ~ authenticationV2 ~ keyStore:", keyStore)
     req.user = decodeUser;
     req.refreshToken = refreshToken;
     return next();
@@ -97,6 +99,7 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
 });
 const authentication = asyncHandler(async (req, res, next) => {
   const userId = req.headers[HEADER.CLIENT_ID]?.toString();
+  console.log("🚀 ~ authentication ~ userId:", userId)
   if (!userId) {
     throw new AuthFailureError("Authentication error");
   }

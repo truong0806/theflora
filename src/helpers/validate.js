@@ -69,15 +69,16 @@ const validateFields = (model, fields) => {
           }
           invalid.push(`${key}`);
         } else {
+          if (typeof value === "number" && value < 0) {
+            invalid.push(`${key}`);
+          }
           switch (key) {
             case "start_date":
-              if (!value) throw new BadRequestError("Start date is invalid");
               if (new Date() > new Date(value)) {
                 throw new BadRequestError("Date start is after current date");
               }
               break;
             case "end_date":
-              if (!value) throw new BadRequestError("Start date is invalid");
               if (new Date() > new Date(value)) {
                 throw new BadRequestError("Date end is before current date");
               }
@@ -90,22 +91,11 @@ const validateFields = (model, fields) => {
                 throw new BadRequestError("Code must 12 characters");
               }
               break;
-            case "shopId":
-              if (!value) throw new BadRequestError("ShopId is invalid");
-              break;
             case "min_order_value":
-              if (!value)
-                throw new BadRequestError("Min order value is invalid");
               if (value < 0)
                 throw new BadRequestError(
                   "Min order value must be greater than 0"
                 );
-            case "product_ids":
-              if (!value) throw new BadRequestError("Product ids is invalid");
-              break;
-            case "applies_to":
-              if (!value) throw new BadRequestError("Applies to is invalid");
-              break;
             case "name":
               const regularExpression = /^[A-Za-z0-9\u00C0-\u1EF9\s]+$/;
               if (!regularExpression.test(value))
@@ -117,24 +107,7 @@ const validateFields = (model, fields) => {
                 );
               }
               break;
-            case "type":
-              if (!value) throw new BadRequestError("Type is invalid");
-              break;
-            case "description":
-              if (!value) throw new BadRequestError("Description is invalid");
-              break;
-            case "value":
-              if (!value) throw new BadRequestError("Description is invalid");
-              break;
-            case "max_value":
-              if (!value) throw new BadRequestError("Description is invalid");
-              break;
-            case "max_uses":
-              if (!value) throw new BadRequestError("Max uses is invalid");
-            case "max_uses_per_user":
-              if (!value)
-                throw new BadRequestError("Max uses per user is invalid");
-              break;
+            
           }
         }
       }

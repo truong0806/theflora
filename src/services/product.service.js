@@ -85,10 +85,6 @@ class ProductFactory {
     });
   }
   static async searchProductByKeySearch({ keySearch }) {
-    console.log(
-      "🚀 ~ ProductFactory ~ searchProductByKeySearch ~ keySearch:",
-      keySearch
-    );
     return await searchProductByKeySearch({ keySearch });
   }
   static async changeStatusProductShop({ product_shop, product_id }) {

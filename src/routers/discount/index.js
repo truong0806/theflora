@@ -12,6 +12,7 @@ routes.get(
   asyncHandler(discountController.getAllDiscountCodeProduct)
 );
 routes.get("/shop/apply", asyncHandler(discountController.applyDiscount));
+routes.get("/shop/cancel", asyncHandler(discountController.cancelDiscount));
 routes.get(
   "/shop/discountcode",
   asyncHandler(discountController.getDiscountByCode)

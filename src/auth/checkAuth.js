@@ -99,7 +99,6 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
 });
 const authentication = asyncHandler(async (req, res, next) => {
   const userId = req.headers[HEADER.CLIENT_ID]?.toString();
-  console.log("🚀 ~ authentication ~ userId:", userId)
   if (!userId) {
     throw new AuthFailureError("Authentication error");
   }

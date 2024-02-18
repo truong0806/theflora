@@ -1,40 +1,46 @@
-"use strict";
+'use strict'
 
-const express = require("express");
-const routes = express.Router();
-const accessController = require("../../controllers/access.controller");
+const express = require('express')
+const routes = express.Router()
+const accessController = require('../../controllers/access.controller')
 const {
   apiKey,
   permission,
   authentication,
   authenticationV2,
-} = require("../../auth/checkAuth");
+} = require('../../auth/checkAuth')
 
-const { asyncHandler } = require("../../helpers/asyncHandler");
-const { createapikey } = require("../../services/apikey.service");
+const { asyncHandler } = require('../../helpers/asyncHandler')
+const { createapikey } = require('../../services/apikey.service')
 
-routes.use(apiKey);
-routes.use(permission(process.env.PERMISSION_USER));
-routes.post("/signin", asyncHandler(accessController.signIn));
-routes.post("/signup", asyncHandler(accessController.signUp));
-
-routes.use(authenticationV2);
-routes.post(
-  "/refreshtoken",
-  asyncHandler(accessController.handlerRefeshTokenV2)
-);
-routes.post("/signout", asyncHandler(accessController.signOut));
+routes.use(apiKey)
 
 routes.post(
-  "/createapikey",
+  '/createapikey',
   permission(process.env.PERMISSION_ADMIN),
   (req, res) => {
-    createapikey(req.body.permissions);
-    res.send("oke");
-  }
-);
+    createapikey(req.body.permissions)
+    res.send('oke')
+  },
+)
+routes.post('/signin', asyncHandler(accessController.signIn))
+routes.post('/signup', asyncHandler(accessController.signUp))
 
+routes.get('/all', asyncHandler(accessController.getShop))
+
+routes.use(authentication)
+routes.post(
+  '/refreshtoken',
+  asyncHandler(accessController.handlerRefeshTokenV2),
+)
+routes.post('/signout', asyncHandler(accessController.signOut))
+
+routes.delete(
+  '/all/:id',
+  permission(process.env.PERMISSION_ADMIN),
+  asyncHandler(accessController.delete),
+)
 // routes.use(permission(process.env.PERMISSION_ADMIN));
 // routes.post("/admin", accessController.signIn);
 
-module.exports = routes;
+module.exports = routes

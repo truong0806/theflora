@@ -13,6 +13,10 @@ const getSelectData = (select = []) => {
 const unSelectData = (select = []) => {
   return Object.fromEntries(select.map((item) => [item, 0]));
 };
+const isEmail = (email) => {
+  const re = /\S+@\S+\.\S+/;
+  return re.test(email);
+}
 
 const removeUndefined = (obj) => {
   Object.keys(obj).forEach((key) => {
@@ -48,4 +52,5 @@ module.exports = {
   getSelectData,
   removeUndefined,
   convertToObjectId,
+  isEmail
 };

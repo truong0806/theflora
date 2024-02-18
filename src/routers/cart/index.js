@@ -12,11 +12,17 @@ const {
 } = require('../../auth/checkAuth')
 
 routes.use(apiKey)
-routes.patch(
-  '/addtocart',
+routes.post(
+  '',
   permission(process.env.PERMISSION_USER),
   authentication,
   asyncHandler(cartController.addToCart),
+)
+routes.get(
+  '/getcart',
+  permission(process.env.PERMISSION_USER),
+  authentication,
+  asyncHandler(cartController.getCart),
 )
 
 module.exports = routes

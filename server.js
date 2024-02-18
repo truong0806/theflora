@@ -4,6 +4,7 @@ dotenv.config();
 const {app:{port}} = require("./src/configs/config");
 const PORT = port;
 
+
 const sever = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

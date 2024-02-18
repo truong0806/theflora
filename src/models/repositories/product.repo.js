@@ -12,7 +12,7 @@ const { Types } = require('mongoose')
 const findProductShopByStatus = async ({ query, limit, skip }) => {
   const foundProduct = await product
     .find(query)
-    .populate('product_shop', 'name email -_id')
+    .populate('product_shop', '_id name email')
     .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit)
@@ -35,9 +35,16 @@ const findAllProducts = async ({ limit, sort, page, filter, select }) => {
   const count = await foundProduct.length
   return { count, foundProduct }
 }
-const findProductById = async ({ product_id, roles, unselect, select }) => {
+const findProductByIdAdmin = async ({
+  product_id,
+  roles,
+  unselect,
+  select,
+}) => {
+  console.log("🚀 ~ product_id:", product_id)
   const isAdmin = roles.includes(process.env.PERMISSION_ADMIN)
   const o_id = convertToObjectId(product_id)
+  console.log("🚀 ~ o_id:", o_id)
   if (isAdmin) {
     const foundProduct = await product
       .find({ _id: o_id })
@@ -53,6 +60,13 @@ const findProductById = async ({ product_id, roles, unselect, select }) => {
     return foundProduct
   }
 }
+const findProductById = async ({ product_id, select }) => {
+  console.log("🚀 ~ findProductById ~ product_id:", product_id)
+  return await product
+    .findOne({ _id: convertToObjectId(product_id), isPublished: true })
+    .select(select)
+    .lean()
+}
 const findProductBySlug = async ({ slug, roles, unselect }) => {
   console.log('🚀 ~ findProductBySlug ~ slug:', slug)
   const isAdmin = roles.includes(process.env.PERMISSION_ADMIN)
@@ -61,7 +75,6 @@ const findProductBySlug = async ({ slug, roles, unselect }) => {
       .find({ product_slug: slug })
       .select(unSelectData(unselect))
       .lean()
-    console.log('🚀 ~ findProductById ~ foundProduct:', foundProduct)
     return foundProduct
   } else {
     const filter = { product_slug: slug, isPublished: true, isDraft: false }
@@ -115,4 +128,5 @@ module.exports = {
   findProductById,
   findProductBySlug,
   updateProductById,
+  findProductByIdAdmin,
 }

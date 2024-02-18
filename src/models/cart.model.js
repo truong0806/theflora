@@ -2,7 +2,6 @@ const { mongoose, model } = require('mongoose')
 const DOCUMENT_NAME = 'Cart'
 const COLLECTION_NAME = 'Carts'
 
-// Declare the Schema of the Mongo model
 var cartSchema = new mongoose.Schema(
   {
     cart_state: {

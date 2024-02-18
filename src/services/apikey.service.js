@@ -1,19 +1,29 @@
-const apiKeyModel = require("../models/apikey.model");
-const crypto = require("crypto");
+const apiKeyModel = require('../models/apikey.model')
+const crypto = require('crypto')
+const { convertToObjectId } = require('../utils')
+const _ = require('lodash')
 
 const findById = async (key) => {
-  const objKey = await apiKeyModel.findOne({ key, status: true }).lean();
-  return objKey;
-};
+  const objKey = await apiKeyModel.findOne({ key, status: true }).lean()
+  return objKey
+}
 const createapikey = async (permissions) => {
-  const newOj = apiKeyModel.create({
-    key: crypto.randomBytes(16).toString("hex"),
+  const newOj = await apiKeyModel.create({
+    key: crypto.randomBytes(16).toString('hex'),
     permissions: permissions,
-  });
-  return newOj;
-};
+  })
+  return newOj
+}
+const deleteapikey = async (_id) => {
+  console.log("🚀 ~ deleteapikey ~ _id:", _id)
+  const objKey = await apiKeyModel.findByIdAndDelete({
+    _id
+  })
+  return objKey
+}
 
 module.exports = {
   findById,
   createapikey,
-};
+  deleteapikey,
+}

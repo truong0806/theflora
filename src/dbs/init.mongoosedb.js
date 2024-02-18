@@ -1,39 +1,37 @@
-"use strict";
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-dotenv.config();
-const {
-  db: { stringConnect },
-} = require("../configs/config");
+'use strict'
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+dotenv.config()
+const db = require('../../config/db')
 
-const connectString = stringConnect;
+const connectString = db.stringConnect
 class Database {
   constructor() {
-    this.connect();
+    this.connect()
   }
-  connect(type = "mongodb") {
+  connect(type = 'mongodb') {
     if (1 === 1) {
-      mongoose.set("debug", true);
-      mongoose.set("debug", { color: true });
+      mongoose.set('debug', true)
+      mongoose.set('debug', { color: true })
     }
     mongoose
-      .connect(connectString,{
+      .connect(connectString, {
         maxPoolSize: 50,
       })
       .then(() => {
-        console.log("Connected to MongoDB");
+        console.log('Connected to MongoDB')
       })
       .catch((err) => {
-        console.log("Error connecting to MongoDB", err);
-      });
+        console.log('Error connecting to MongoDB', err)
+      })
   }
   static getInstance() {
     if (!Database.instance) {
-      Database.instance = new Database();
+      Database.instance = new Database()
     }
-    return Database.instance;
+    return Database.instance
   }
 }
 
-const instanceMongodb = Database.getInstance();
-module.exports = instanceMongodb;
+const instanceMongodb = Database.getInstance()
+module.exports = instanceMongodb

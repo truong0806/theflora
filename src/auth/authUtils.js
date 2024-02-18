@@ -1,20 +1,21 @@
-"use strict";
+'use strict'
 
-const JWT = require("jsonwebtoken");
-const crypto = require("node:crypto");
+const JWT = require('jsonwebtoken')
+const crypto = require('node:crypto')
+const config = require('config')
 
 const createTokenPair = async (payload, privateKey) => {
   try {
     // accessToken
     const accessToken = JWT.sign(payload, privateKey, {
-      algorithm: "RS256",
-      expiresIn: "2 days",
-    });
+      algorithm: 'RS256',
+      expiresIn: config.get('accessTokenTtl'),
+    })
 
     const refreshToken = JWT.sign(payload, privateKey, {
-      algorithm: "RS256",
-      expiresIn: "7 days",
-    });
+      algorithm: 'RS256',
+      expiresIn: config.get('refreshTokenTtl'),
+    })
     //
     // JWT.verify(accessToken, publicKey, (err, decode) => {
     //   if (err) {
@@ -23,35 +24,35 @@ const createTokenPair = async (payload, privateKey) => {
     //     console.log(`decode verify::`, decode);
     //   }
     // });
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken }
   } catch (error) {
-    console.log("🚀 ~ createTokenPair ~ error:", error);
+    console.log('🚀 ~ createTokenPair ~ error:', error)
   }
-};
+}
 const JWTVerify = (token, publicKey) => {
   try {
-    const decode = JWT.verify(token, publicKey);
-    return decode;
+    const decode = JWT.verify(token, publicKey)
+    return decode
   } catch (error) {
-    return null;
+    return null
   }
-};
+}
 const generateKeyPairSync = () => {
-  const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
     modulusLength: 2048,
     publicKeyEncoding: {
-      type: "spki",
-      format: "pem",
+      type: 'spki',
+      format: 'pem',
     },
     privateKeyEncoding: {
-      type: "pkcs8",
-      format: "pem",
+      type: 'pkcs8',
+      format: 'pem',
     },
-  });
-  return { publicKey, privateKey };
-};
+  })
+  return { publicKey, privateKey }
+}
 module.exports = {
   createTokenPair,
   JWTVerify,
   generateKeyPairSync,
-};
+}

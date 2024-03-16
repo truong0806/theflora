@@ -56,10 +56,9 @@ class CartService {
   }
 
   static async updateCartProductQuantity({ userId, listProduct }) {
-    for (let i = 0; i < listProduct.length; i++) {
-      const { productId, quantity } = listProduct[i]
-      console.log("🚀 ~ CartService ~ updateCartProductQuantity ~ productId, quantity:", productId, quantity)
-      const query = {
+    for (const element of listProduct) {
+      const { productId, quantity } = element
+       const query = {
         cart_userId: userId,
         cart_state: 'active',
         'cart_products.productId': productId,
@@ -121,8 +120,7 @@ class CartService {
       })
       if (!productPrice) {
         throw new Error('Product not found')
-      } else {
-        if (
+      } else if (
           item.quantity > productPrice[0].product_quantity ||
           productPrice[0].product_quantity <= 0
         ) {
@@ -135,7 +133,6 @@ class CartService {
             product_shop: productPrice[0].product_shop,
           })
         }
-      }
     }
     if (message.length > 0) {
       throw new Error(`${message} is out of stock`)
@@ -166,7 +163,7 @@ class CartService {
   }
   static async addToCartV2(userId, { shop_order_Id }) {
     const { productId, quantity, ol_quantity } =
-      shop_order_Id[0]?.item_product[0]
+      shop_order_Id[0]?.item_product[0] ?? {};
     const foundCart = await cartModel.findOne({ cart_userId: userId })
     if (!foundCart) {
       return await this.createCart({
@@ -179,7 +176,6 @@ class CartService {
     if (!foundProduct) {
       throw new Error('Product not found')
     }
-    const old_quantity = foundProduct.product_quantity
     if (foundProduct.product_shop.toString() !== shop_order_Id[0]?.shopId) {
       throw new Error('Product not found in this shop')
     }
@@ -213,7 +209,8 @@ class CartService {
   }
   static async deleteUserCart({ userId, productId }) {
     const query = { cart_userId: userId, cart_state: 'active' }
-    updateSet = {
+
+    const updateSet = {
       $pull: { cart_products: { productId: productId } },
     }
     return await cartModel.findOneAndUpdate(query, updateSet, { new: true })

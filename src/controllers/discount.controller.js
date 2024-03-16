@@ -35,10 +35,16 @@ class DiscountController {
       data: await discountService.getCodeByShop(req.body),
     }).send(res);
   };
-  applyDiscount = async (req, res, next) => {
+  getDiscount = async (req, res, next) => {
     validateFields("discount", req.body);
     new OK({
-      data: await discountService.applyDiscountCode(req.body),
+      data: await discountService.getDiscountAmount(req.body),
+    }).send(res);
+  };
+  apllyDiscountCode = async (req, res, next) => {
+    validateFields("discount", req.body);
+    new OK({
+      data: await discountService.getDiscountAmount(req.body, this.apllyDiscountCode = true),
     }).send(res);
   };
   cancelDiscount = async (req, res, next) => {

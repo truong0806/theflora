@@ -40,7 +40,6 @@ routes.delete(
   permission(process.env.PERMISSION_ADMIN),
   asyncHandler(accessController.delete),
 )
-// routes.use(permission(process.env.PERMISSION_ADMIN));
-// routes.post("/admin", accessController.signIn);
+
 
 module.exports = routes

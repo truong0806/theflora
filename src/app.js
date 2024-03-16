@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true }))
 // checkOverLoad();
 
 //database
-require('./dbs/init.mongoosedb').default
+require('./dbs/init.mongoosedb')
 
 //routes
 
@@ -44,13 +44,13 @@ const initRoutes = require('./routers')
 initRoutes(app)
 
 //error handler
-app.use((req, res, next) => {
-  {
-    const error = new Error('Not Found')
-    error.code = 404
-    next(error)
-  }
+app.use((next) => {
+  const error = new Error('Not Found')
+  error.code = 404
+  next(error)
+
 })
+
 app.use((error, req, res, next) => {
   const statusCode = error.status || 500;
   return res.status(statusCode).json({

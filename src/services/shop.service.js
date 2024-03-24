@@ -1,4 +1,7 @@
+// const { getRedis } = require("../dbs/init.redis");
+// const { instanceConnect: redisClient } = getRedis();
 const shopModel = require("../models/shop.model");
+
 
 const findByEmail = async ({
   email,

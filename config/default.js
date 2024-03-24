@@ -7,6 +7,6 @@ module.exports = {
     production: process.env.PRO_APP_PORT,
   },
   saltWorkFactor: 10,
-  accessTokenTtl: '15m',
+  accessTokenTtl: '1d',
   refreshTokenTtl: '1y',
 }

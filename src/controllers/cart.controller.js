@@ -17,7 +17,6 @@ class CartController {
     validateFields('cart', req.body)
     const { userId } = req.user
     const { products } = req.body
-    console.log('🚀 ~ CartController ~ addToCart= ~ products:', products)
     new OK({
       data: await cartService.addToCart({ userId, products }),
       options: {
@@ -30,6 +29,12 @@ class CartController {
     console.log('🚀 ~ CartController ~ getCart= ~ userId:', userId)
     new OK({
       data: await cartService.getUserCart(userId),
+    }).send(res)
+  }
+  deleteCart = async (req, res, next) => {
+    const { userId } = req.user
+    new OK({
+      data: await cartService.deleteUserCart(userId),
     }).send(res)
   }
 }

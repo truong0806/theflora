@@ -6,6 +6,7 @@ const {
   unSelectData,
   convertToObjectId,
 } = require('../../utils')
+const productModel = require('../product.model')
 const { product } = require('../product.model')
 const { Types } = require('mongoose')
 
@@ -61,11 +62,8 @@ const findProductByIdAdmin = async ({
   }
 }
 const findProductById = async ({ product_id, select }) => {
-  console.log("🚀 ~ findProductById ~ product_id:", product_id)
-  return await product
-    .findOne({ _id: convertToObjectId(product_id), isPublished: true })
-    .select(select)
-    .lean()
+
+  return await product.findById(product_id).select(select).exec();
 }
 const findProductBySlug = async ({ slug, roles, unselect }) => {
   console.log('🚀 ~ findProductBySlug ~ slug:', slug)

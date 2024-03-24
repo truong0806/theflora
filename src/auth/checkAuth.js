@@ -125,7 +125,6 @@ const authentication = asyncHandler(async (req, res, next) => {
   }
   try {
     const decode = JWTVerify(token, keyStore.publicKey)
-    console.log('🚀 ~ authentication ~ decode:', decode)
     if (!decode) {
       throw new AuthFailureError('Authentication error')
     }

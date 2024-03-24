@@ -24,5 +24,11 @@ routes.get(
   authentication,
   asyncHandler(cartController.getCart),
 )
+routes.delete(
+  '',
+  permission(process.env.PERMISSION_USER),
+  authentication,
+  asyncHandler(cartController.deleteCart),
+)
 
 module.exports = routes

@@ -66,9 +66,9 @@ class ProductFactory {
     return await findProductPublishForShop({ query, limit, skip })
   }
 
-  static async findProductById({ product_id, roles }) {
+  static async findProductById(product_id) {
     return await findProductById({
-      product_id,
+      product_id, select: ['product_name', 'product_price', 'product_quantity']
     })
   }
   static async findProductByIdAdmin({ product_id, roles }) {

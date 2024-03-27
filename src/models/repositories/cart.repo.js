@@ -1,7 +1,14 @@
-const { findProductById } = require("../../services/product.service");
+const { findProductById } = require("./product.repo");
+const { convertToObjectId } = require("../../utils");
 const cartModel = require("../cart.model");
 const productModel = require("../product.model");
 
+const findCartByUserId = (userId) => {
+    return cartModel.findOne({ cart_userId: userId })
+}
+const findCartById = (id) => {
+    return cartModel.findOne({ _id: convertToObjectId(id), cart_state: 'active' }).lean()
+}
 const updateCartProductQuantity = async ({ listProduct, foundCart }) => {
     const mes = [];
     for (const { shopId, item_product } of listProduct) {
@@ -20,8 +27,7 @@ const updateCartProductQuantity = async ({ listProduct, foundCart }) => {
                 console.error('Product not found in the cart');
                 continue;
             }
-
-            const foundProduct = await findProductById(productId);
+            const foundProduct = await findProductById({ product_id: productId, select: ['product_quantity'] });
             const product = foundCart.cart_products[shopIndex].item_product[productIndex];
             product.quantity += el.quantity;
             if (product.quantity > foundProduct.product_quantity) {
@@ -35,8 +41,6 @@ const updateCartProductQuantity = async ({ listProduct, foundCart }) => {
 
     return mes.length > 0 ? mes : foundCart;
 };
-
-
 const createCart = async ({ userId, listProduct }) => {
     const query = {
         cart_userId: userId,
@@ -97,11 +101,6 @@ const getUserCart = async ({ userId, select }) => {
         cart_state: 'active',
     }).select(select)
 }
-
-
-
-
-
 const updateCartProductQuantityV2 = async ({ userId, shop_order_Id }) => {
     for (let item of shop_order_Id) {
         for (let product of item.item_product) {
@@ -131,6 +130,8 @@ const updateCartProductQuantityV2 = async ({ userId, shop_order_Id }) => {
 }
 
 module.exports = {
+    findCartByUserId,
+    findCartById,
     updateCartProductQuantity,
     createCart,
     updateCartProductQuantityV2,

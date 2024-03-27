@@ -10,8 +10,11 @@ const {
   updateProductById,
   findProductByIdAdmin,
 } = require('../models/repositories/product.repo')
-const { removeUndefined, updateNestedObjectParse } = require('../utils')
 const { createInventory } = require('../models/repositories/inventory.repo')
+const {
+  removeUndefined,
+  updateNestedObjectParse,
+} = require('../utils/mongoose')
 
 class ProductFactory {
   static productRegistry = {}
@@ -68,7 +71,8 @@ class ProductFactory {
 
   static async findProductById(product_id) {
     return await findProductById({
-      product_id, select: ['product_name', 'product_price', 'product_quantity']
+      product_id,
+      select: ['product_name', 'product_price', 'product_quantity'],
     })
   }
   static async findProductByIdAdmin({ product_id, roles }) {
@@ -131,13 +135,7 @@ class Product {
     return newProduct
   }
   async updateProduct(productId, bodyUpdate) {
-    const objectParams = removeUndefined(this)
-    const updated = await updateProductById({
-      productId,
-      bodyUpdate,
-      model: product,
-    })
-    return updated
+    return await updateProductById({ productId, bodyUpdate, model: product })
   }
 }
 class Clothing extends Product {
@@ -149,7 +147,6 @@ class Clothing extends Product {
     if (!newClothing) {
       throw new BadRequestError('Create clothing failed')
     }
-
     const newProduct = await super.createProduct(newClothing._id)
     if (!newProduct) {
       throw new BadRequestError('Create product failed')
@@ -163,7 +160,7 @@ class Clothing extends Product {
         productId,
         bodyUpdate: updateNestedObjectParse(objectParams.product_attributes),
         objectParams,
-        model: clothing,
+        model: electric,
       })
     }
     const updated = await super.updateProduct(

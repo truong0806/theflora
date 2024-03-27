@@ -5,7 +5,6 @@ const app = require('../app')
 const db = require('../../config/db')
 const { createProduct } = require('../services/product.service')
 const { createapikey, deleteapikey } = require('../services/apikey.service')
-const { convertToObjectId } = require('../utils')
 
 const connectString = db.stringConnect
 const apiKeyPayload = ['2222', '1111', '0000']
@@ -33,6 +32,7 @@ describe('product', () => {
   beforeAll(async () => {
     await mongoose.connect(connectString)
     apikey = await createapikey(apiKeyPayload)
+    console.log("🚀 ~ beforeAll ~ apikey:", apikey)
   })
 
   afterAll(async () => {
@@ -50,7 +50,7 @@ describe('product', () => {
     describe('product id is invalid', () => {
       it('should return a 500', async () => {
         const productId = '65acd807011cc3f44404a451'
-        const { statusCode, body } = await supertest(app)
+        const { statusCode } = await supertest(app)
           .get(`/api/v1/product/id/${productId}`)
           .set('x-api-key', `${apikey.key}`)
         expect(statusCode).toBe(500)

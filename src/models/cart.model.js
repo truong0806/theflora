@@ -2,7 +2,7 @@ const { mongoose, model } = require('mongoose')
 const DOCUMENT_NAME = 'Cart'
 const COLLECTION_NAME = 'Carts'
 
-var cartSchema = new mongoose.Schema(
+let cartSchema = new mongoose.Schema(
   {
     cart_state: {
       type: String,

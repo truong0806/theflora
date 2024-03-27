@@ -1,21 +1,19 @@
+const { BadRequestError } = require("../core/error.response")
+const { findCartById } = require("../models/repositories/cart.repo")
+
 class CheckoutFactory {
-    static async checkoutReview({ cartId, userId, shopId }){
-        const foundCart = await cartModel.findOne({ cart_userId: userId })
+    static async checkoutReview({ cartId, userId,  }) {
+        const foundCart = await findCartById(cartId)
         if (!foundCart) {
-            throw new Error('Cart not found')
+            throw new BadRequestError('Cart not found')
         }
-        if (foundCart.cart_products.length === 0) {
-            throw new Error('Cart is empty')
-        }
-        const foundShop = await shopModel.findOne({ _id: shopId })
-        if (!foundShop) {
-            throw new Error('Shop not found')
-        }
-        const listProduct = await this.findProductAfterAddToCart(foundCart.cart_products)
-        return await cartModel.findOneAndUpdate(
-            { cart_userId: userId },
-            { cart_products: listProduct },
-            { new: true },
-        )
+        const checkout_order = {
+            totalprice: 0,
+            feeShip: 0,
+            totalDiscount: 0,
+            totalCheckout: 0
+        }, shop_order_id_new = []
+
+
     }
 }

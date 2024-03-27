@@ -74,22 +74,30 @@ class ProductController {
     }).send(res)
   }
   searchProductByKeySearchs = async (req, res, next) => {
+    const response = await productService.searchProductByKeySearch(keySearch)
     new OK({
-      message: 'Search product successfully',
-      data: await productService.searchProductByKeySearch(keySearch),
+      message: response
+        ? 'Search product successfully'
+        : 'Search product failed',
+      data: response || {},
     }).send(res)
   }
   updateProductById = async (req, res, next) => {
+    const response = await productService.updateProduct(
+      req.body.product_type,
+      req.params.productId,
+      {
+        ...req.body,
+        product_shop: req.user.userId,
+      },
+    )
+    if (!response) {
+      throw new Error('Update product failed')
+    }
+
     new OK({
       message: 'Update product successfully',
-      data: await productService.updateProduct(
-        req.body.product_type,
-        req.params.productId,
-        {
-          ...req.body,
-          product_shop: req.user.userId,
-        },
-      ),
+      data: response,
     }).send(res)
   }
 }

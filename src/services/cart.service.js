@@ -1,17 +1,16 @@
 const cartModel = require('../models/cart.model')
 const { findProductById } = require('../models/repositories/product.repo')
 const { ValidateProductBeforeAddToCart } = require('../utils')
-const { updateCartProductQuantity, createCart, getUserCart, deleteUserCart } = require('../models/repositories/cart.repo')
+const { updateCartProductQuantity, createCart, getUserCart, deleteUserCart, findCartByUserId } = require('../models/repositories/cart.repo')
 
 class CartService {
 
   static async addToCart({ userId, products }) {
-    const foundCart = await cartModel.findOne({ cart_userId: userId })
+    const foundCart = await findCartByUserId(userId)
     let listProduct = await ValidateProductBeforeAddToCart(products)
     if (foundCart && products.length > 0) {
       return await updateCartProductQuantity({ userId, listProduct, foundCart })
     } else if (foundCart.cart_products.length === 0) {
-      console.log('dcsb')
       return await cartModel.findOneAndUpdate(
         { cart_userId: userId },
         { cart_products: listProduct },
@@ -45,6 +44,7 @@ class CartService {
     if (quantity === 0) {
       ///delete
     }
+    
     for (let item of shop_order_Id) {
       const { item_product } = item
       for (let product of item_product) {

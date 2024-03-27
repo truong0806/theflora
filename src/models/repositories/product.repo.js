@@ -1,14 +1,10 @@
 'use strict'
 
-const { asyncHandler } = require('../../helpers/asyncHandler')
 const {
-  getSelectData,
+  ConvertToObjectId,
   unSelectData,
-  convertToObjectId,
-} = require('../../utils')
-const productModel = require('../product.model')
+} = require('../../utils/mongoose/mongoose')
 const { product } = require('../product.model')
-const { Types } = require('mongoose')
 
 const findProductShopByStatus = async ({ query, limit, skip }) => {
   const foundProduct = await product
@@ -42,10 +38,9 @@ const findProductByIdAdmin = async ({
   unselect,
   select,
 }) => {
-  console.log("🚀 ~ product_id:", product_id)
   const isAdmin = roles.includes(process.env.PERMISSION_ADMIN)
-  const o_id = convertToObjectId(product_id)
-  console.log("🚀 ~ o_id:", o_id)
+  const o_id = ConvertToObjectId(product_id)
+  console.log('🚀 ~ o_id:', o_id)
   if (isAdmin) {
     const foundProduct = await product
       .find({ _id: o_id })
@@ -62,8 +57,9 @@ const findProductByIdAdmin = async ({
   }
 }
 const findProductById = async ({ product_id, select }) => {
+  console.log('🚀 ~ findProductById ~ product_id:', product_id)
 
-  return await product.findById(product_id).select(select).exec();
+  return await product.findById(product_id).select(select).exec()
 }
 const findProductBySlug = async ({ slug, roles, unselect }) => {
   console.log('🚀 ~ findProductBySlug ~ slug:', slug)
@@ -110,12 +106,30 @@ const changeStatusProductShop = async ({ product_shop, product_id }) => {
   const updatedProduct = await foundProduct.save()
   return updatedProduct
 }
-const updateProductById = async ({ productId, bodyUpdate, model, isNew }) => {
-  console.log('🚀 ~ product_id:', productId)
+const updateProductById = async ({
+  productId,
+  bodyUpdate,
+  model,
+  isNew = true,
+}) => {
   const update = await model.findByIdAndUpdate(productId, bodyUpdate, {
     new: isNew,
   })
   return update
+}
+const checkProduct = async (listProduct) => {
+  return await Promise.all(
+    listProduct.map(async (product) => {
+      const foundProduct = await findProductById(product.productId)
+      if (foundProduct) {
+        return {
+          price: product.product_price,
+          quantity: product.product_quantity,
+          productId: product.productId,
+        }
+      }
+    }),
+  )
 }
 
 module.exports = {
@@ -127,4 +141,5 @@ module.exports = {
   findProductBySlug,
   updateProductById,
   findProductByIdAdmin,
+  checkProduct,
 }

@@ -1,7 +1,7 @@
-const { BadRequestError } = require("../../core/error.response");
-const { convertToObjectId, unSelectData } = require("../../utils");
-const discountModel = require("../discount.model");
-const { product } = require("../product.model");
+const { BadRequestError } = require('../../core/error.response')
+const { ConvertToObjectId } = require('../../utils/mongoose/mongoose')
+const discountModel = require('../discount.model')
+const { product } = require('../product.model')
 
 const findAllDiscountCode = async ({
   filter,
@@ -16,19 +16,19 @@ const findAllDiscountCode = async ({
     .limit(+limit)
     .skip(+page)
     .select(select || unSelectData(unSelect))
-    .lean();
-  const count = await foundDiscount.length;
-  return { count, foundDiscount };
-};
+    .lean()
+  const count = await foundDiscount.length
+  return { count, foundDiscount }
+}
 const findDiscountByCode = async (code, shopId) => {
   const foundDiscount = await discountModel
     .findOne({
       discount_code: code,
-      discount_shopId: convertToObjectId(shopId),
+      discount_shopId: ConvertToObjectId(shopId),
     })
-    .lean();
-  return foundDiscount;
-};
+    .lean()
+  return foundDiscount
+}
 const findByIdAndUpdate = async (discount, userId) => {
   return await discountModel.findByIdAndUpdate(discount._id, {
     $pull: {
@@ -44,47 +44,54 @@ const findByIdAndUpdate = async (discount, userId) => {
   })
 }
 
-
 const checkDiscountExists = async ({ model, filter }) => {
-  const foundDiscount = await model.findOne(filter).lean();
-  return foundDiscount;
-};
+  const foundDiscount = await model.findOne(filter).lean()
+  return foundDiscount
+}
 
 const validateDiscount = (discount, totalOrder) => {
-  if (!discount.discount_is_active) throw new BadRequestError('Discount is expired');
-  if (!discount.discount_max_uses) throw new BadRequestError('Discount codes are sold out');
-  if (new Date() < new Date(discount.discount_start_date)) throw new BadRequestError('Discount have not started yet');
-  if (new Date() > new Date(discount.discount_end_date)) throw new BadRequestError('Discount is expired');
-  if (discount.discount_min_order_value > 0 && (totalOrder < discount.discount_min_order_value || (discount.discount_type === 'percentage' && discount.discount_value > 95))) {
-    throw new BadRequestError('Error discount code');
+  if (!discount.discount_is_active)
+    throw new BadRequestError('Discount is expired')
+  if (!discount.discount_max_uses)
+    throw new BadRequestError('Discount codes are sold out')
+  if (new Date() < new Date(discount.discount_start_date))
+    throw new BadRequestError('Discount have not started yet')
+  if (new Date() > new Date(discount.discount_end_date))
+    throw new BadRequestError('Discount is expired')
+  if (
+    discount.discount_min_order_value > 0 &&
+    (totalOrder < discount.discount_min_order_value ||
+      (discount.discount_type === 'percentage' && discount.discount_value > 95))
+  ) {
+    throw new BadRequestError('Error discount code')
   }
-};
-
+}
 
 const calculateTotalOrder = async (products) => {
   const fountProduct = await product
     .find({
       _id: { $in: products.map((item) => item.productId) },
     })
-    .lean();
+    .lean()
   return fountProduct.reduce((total, item) => {
     const foundItem = products.find(
-      (product) => product.productId === item._id.toString()
-    );
+      (product) => product.productId === item._id.toString(),
+    )
     const { quantity } = foundItem
-    return total + quantity * item.product_price;
-  }, 0);
+    return total + quantity * item.product_price
+  }, 0)
 }
-
 
 const findUserUsedDiscount = async (discount_users_used, userId) => {
-  return await discount_users_used.find(
-    (user) => user.userId === userId
-  );
+  return await discount_users_used.find((user) => user.userId === userId)
 }
 
-
-const calculateDiscountAmount = (discount_type, discount_value, discount_max_value, totalOrder) => {
+const calculateDiscountAmount = (
+  discount_type,
+  discount_value,
+  discount_max_value,
+  totalOrder,
+) => {
   let amount, totalPrice
   if (discount_type === 'fix_amount') {
     if (discount_value > totalOrder) {
@@ -105,11 +112,14 @@ const calculateDiscountAmount = (discount_type, discount_value, discount_max_val
 }
 
 const updateDiscountUsedCount = async (foundDiscount, userId) => {
-  console.log("🚀 ~ updateDiscountUsedCount ~ foundDiscount:", foundDiscount._id)
+  console.log(
+    '🚀 ~ updateDiscountUsedCount ~ foundDiscount:',
+    foundDiscount._id,
+  )
   let foundUser = await discountModel.findOne({
     _id: foundDiscount._id,
-    "discount_users_used.userId": userId,
-  });
+    'discount_users_used.userId': userId,
+  })
   if (foundUser) {
     // Nếu userId đã tồn tại trong discount_users_used, tăng used lên 1
     await discountModel.updateOne(
@@ -143,10 +153,10 @@ const updateDiscountUsedCount = async (foundDiscount, userId) => {
 }
 
 const getDiscountValue = (foundDiscount, discount_type) => {
-  if (discount_type === "fix_amount") {
-    return foundDiscount.discount_value;
+  if (discount_type === 'fix_amount') {
+    return foundDiscount.discount_value
   } else {
-    return `${foundDiscount.discount_value}%`;
+    return `${foundDiscount.discount_value}%`
   }
 }
 
@@ -160,5 +170,5 @@ module.exports = {
   updateDiscountUsedCount,
   getDiscountValue,
   findUserUsedDiscount,
-  findByIdAndUpdate
-};
+  findByIdAndUpdate,
+}

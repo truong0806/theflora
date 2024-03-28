@@ -1,13 +1,12 @@
 const { findProductById } = require("./product.repo");
-const { convertToObjectId } = require("../../utils");
 const cartModel = require("../cart.model");
-const productModel = require("../product.model");
+const { ConvertToObjectId } = require("../../utils/mongoose/mongoose");
 
 const findCartByUserId = (userId) => {
     return cartModel.findOne({ cart_userId: userId })
 }
 const findCartById = (id) => {
-    return cartModel.findOne({ _id: convertToObjectId(id), cart_state: 'active' }).lean()
+    return cartModel.findOne({ _id: ConvertToObjectId(id), cart_state: 'active' }).lean()
 }
 const updateCartProductQuantity = async ({ listProduct, foundCart }) => {
     const mes = [];

@@ -1,6 +1,5 @@
 const apiKeyModel = require('../models/apikey.model')
 const crypto = require('crypto')
-const { convertToObjectId } = require('../utils')
 const _ = require('lodash')
 
 const findById = async (key) => {

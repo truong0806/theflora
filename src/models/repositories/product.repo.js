@@ -3,6 +3,7 @@
 const {
   ConvertToObjectId,
   unSelectData,
+  getSelectData,
 } = require('../../utils/mongoose/mongoose')
 const { product } = require('../product.model')
 
@@ -117,14 +118,18 @@ const updateProductById = async ({
   })
   return update
 }
-const checkProduct = async (listProduct) => {
+const checkProduct = async ({ listProduct }) => {
   return await Promise.all(
     listProduct.map(async (product) => {
-      const foundProduct = await findProductById(product.productId)
+      const foundProduct = await findProductById({
+        product_id: product.productId,
+        select: ['_id'],
+      })
+      console.log('🚀 ~ listProduct.map ~ foundProduct:', foundProduct)
       if (foundProduct) {
         return {
           price: product.product_price,
-          quantity: product.product_quantity,
+          quantity: product.quantity,
           productId: product.productId,
         }
       }

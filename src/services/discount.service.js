@@ -13,7 +13,7 @@ const {
     findByIdAndUpdate
 } = require('../models/repositories/discount.repo')
 const { findAllProducts } = require('../models/repositories/product.repo')
-const { convertToObjectId } = require('../utils')
+const { ConvertToObjectId } = require('../utils/mongoose/mongoose')
 
 class DiscountService {
     static async createDiscountCode({
@@ -38,7 +38,7 @@ class DiscountService {
         const foundDiscount = await discount
             .findOne({
                 discount_code: code,
-                discount_shopId: convertToObjectId(shopId),
+                discount_shopId: ConvertToObjectId(shopId),
             })
             .lean()
         const { discount_code, discount_is_active } = foundDiscount
@@ -73,7 +73,7 @@ class DiscountService {
             discount_used_count: used_count,
             discount_users_used: users_used,
             discount_min_order_value: min_order_value,
-            discount_shopId: convertToObjectId(shopId),
+            discount_shopId: ConvertToObjectId(shopId),
             discount_max_per_user: max_uses_per_users,
             discount_is_active: is_active,
             discount_applies_to: applies_to,
@@ -104,7 +104,7 @@ class DiscountService {
         const foundDiscount = await discount
             .findOne({
                 discount_code: code,
-                discount_shopId: convertToObjectId(shopId),
+                discount_shopId: ConvertToObjectId(shopId),
             })
             .lean()
         const { discount_is_active, discount_product_ids, discount_applies_to } =
@@ -116,7 +116,7 @@ class DiscountService {
         if (discount_applies_to === 'all') {
             products = await findAllProducts({
                 filter: {
-                    product_shop: convertToObjectId(shopId),
+                    product_shop: ConvertToObjectId(shopId),
                     // isPublished: true,
                 },
                 limit: +limit,
@@ -143,7 +143,7 @@ class DiscountService {
         const foundDiscount = await findAllDiscountCode({
             shopId,
             filter: {
-                discount_shopId: convertToObjectId(shopId),
+                discount_shopId: ConvertToObjectId(shopId),
             },
             limit: +limit,
             page: +page,

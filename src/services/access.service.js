@@ -10,8 +10,9 @@ const {
   generateKeyPairSync,
   JWTVerify,
 } = require('../auth/authUtils')
-const { getInfoData, unSelectData, isEmail, convertToObjectId } = require('../utils')
+const {  isEmail } = require('../utils')
 const { ForbiddenError, AuthFailureError } = require('../core/error.response')
+const { getInfoData, ConvertToObjectId } = require('../utils/mongoose/mongoose')
 
 const RoleShop = {
   ADMIN: '0000',
@@ -221,7 +222,7 @@ class AccessService {
   static deleteShop = async ( id ) => {
     console.log("🚀 ~ AccessService ~ staticdeleteShop ~ id:", id)
     try {
-      const deletedShop = await shopModel.findByIdAndDelete(convertToObjectId(id))
+      const deletedShop = await shopModel.findByIdAndDelete(ConvertToObjectId(id))
       if (!deletedShop) {
         throw new ForbiddenError('Shop not found')
       }

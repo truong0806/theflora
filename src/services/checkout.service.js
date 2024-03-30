@@ -1,7 +1,8 @@
 const { BadRequestError } = require('../core/error.response')
 const { findCartById } = require('../models/repositories/cart.repo')
-const { calculateTotalOrder } = require('../models/repositories/discount.repo')
+const { calculateTotalOrder } = require('../models/repositories/checkout.repo')
 const { checkProduct } = require('../models/repositories/product.repo')
+const { getDiscountAmount } = require('./discount.service')
 
 class CheckoutFactory {
   static async checkoutReview({ cartId, userId, cart_products = [] }) {
@@ -20,29 +21,38 @@ class CheckoutFactory {
     //Sum the total price and fee
     for (const element of cart_products) {
       const { shopId, shop_discount = [], item_product = [] } = element
-      const checkProductServer = await checkProduct({
-        listProduct: item_product,
-      })
-      if (!checkProductServer[0])
-        throw new BadRequestError('Something went wrong')
-
-      //Calculate the total price
-      const totalPrice = checkProductServer.reduce(
-        (acc, product) => acc + product.price * product.quantity,
-        0,
+      const { totalPrice, checkProductServer } = await calculateTotalOrder(
+        item_product,
       )
-      checkout_order.totalCheckout += totalPrice
       const itemCheckout = {
         shopId,
         shop_discount,
         priceRaw: totalPrice,
-        priceApplyDiscount: totalPrice,
+        priceApplyDiscount: 0,
         item_product: checkProductServer,
       }
       if (shop_discount.length > 0) {
-        const totalPrice = await calculateTotalOrder(checkProductServer)
-
+        const { totalPriceAfterDis = 0, discount = 0 } =
+          await getDiscountAmount({
+            code: shop_discount[0],
+            userId,
+            shopId,
+            products: checkProductServer,
+          })
+        itemCheckout.priceApplyDiscount += totalPriceAfterDis
+        checkout_order.totalDiscount += discount
+      } else {
+        checkout_order.totalCheckout += totalPrice
       }
+      //Final total price
+      checkout_order.totalCheckout += itemCheckout.priceApplyDiscount
+      checkout_order.totalprice += totalPrice
+      shop_order_id_new.push(itemCheckout)
+    }
+    return {
+      cart_products,
+      shop_order_id_new,
+      checkout_order,
     }
   }
 }

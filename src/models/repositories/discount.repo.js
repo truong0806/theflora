@@ -1,7 +1,6 @@
 const { BadRequestError } = require('../../core/error.response')
 const { ConvertToObjectId } = require('../../utils/mongoose/mongoose')
 const discountModel = require('../discount.model')
-const { product } = require('../product.model')
 
 const findAllDiscountCode = async ({
   filter,
@@ -43,12 +42,10 @@ const findByIdAndUpdate = async (discount, userId) => {
     },
   })
 }
-
 const checkDiscountExists = async ({ model, filter }) => {
   const foundDiscount = await model.findOne(filter).lean()
   return foundDiscount
 }
-
 const validateDiscount = (discount, totalOrder) => {
   if (!discount.discount_is_active)
     throw new BadRequestError('Discount is expired')
@@ -66,22 +63,6 @@ const validateDiscount = (discount, totalOrder) => {
     throw new BadRequestError('Error discount code')
   }
 }
-
-const calculateTotalOrder = async (products) => {
-  const fountProduct = await product
-    .find({
-      _id: { $in: products.map((item) => item.productId) },
-    })
-    .lean()
-  return fountProduct.reduce((total, item) => {
-    const foundItem = products.find(
-      (product) => product.productId === item._id.toString(),
-    )
-    const { quantity } = foundItem
-    return total + quantity * item.product_price
-  }, 0)
-}
-
 const findUserUsedDiscount = async (discount_users_used, userId) => {
   return await discount_users_used.find((user) => user.userId === userId)
 }
@@ -102,7 +83,7 @@ const calculateDiscountAmount = (
       totalPrice = totalOrder - amount
     }
   } else {
-    amount = (discount_value / 100) * totalOrder
+    amount = (discount_value * totalOrder) / 100
     if (amount > discount_max_value) {
       amount = discount_max_value
     }
@@ -112,10 +93,6 @@ const calculateDiscountAmount = (
 }
 
 const updateDiscountUsedCount = async (foundDiscount, userId) => {
-  console.log(
-    '🚀 ~ updateDiscountUsedCount ~ foundDiscount:',
-    foundDiscount._id,
-  )
   let foundUser = await discountModel.findOne({
     _id: foundDiscount._id,
     'discount_users_used.userId': userId,
@@ -165,7 +142,6 @@ module.exports = {
   checkDiscountExists,
   findAllDiscountCode,
   validateDiscount,
-  calculateTotalOrder,
   calculateDiscountAmount,
   updateDiscountUsedCount,
   getDiscountValue,

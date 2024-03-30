@@ -58,8 +58,6 @@ const findProductByIdAdmin = async ({
   }
 }
 const findProductById = async ({ product_id, select }) => {
-  console.log('🚀 ~ findProductById ~ product_id:', product_id)
-
   return await product.findById(product_id).select(select).exec()
 }
 const findProductBySlug = async ({ slug, roles, unselect }) => {
@@ -123,12 +121,12 @@ const checkProduct = async ({ listProduct }) => {
     listProduct.map(async (product) => {
       const foundProduct = await findProductById({
         product_id: product.productId,
-        select: ['_id'],
+        select: ['_id', 'product_price'],
       })
       console.log('🚀 ~ listProduct.map ~ foundProduct:', foundProduct)
       if (foundProduct) {
         return {
-          price: product.product_price,
+          price: foundProduct.product_price,
           quantity: product.quantity,
           productId: product.productId,
         }

@@ -195,7 +195,6 @@ class DiscountService {
       (acc, product) => {
         let totalDiscount = 0
         let productTotalPrice = product.price * product.quantity
-
         if (productTotalPrice < discount_min_order_value)
           throw new BadRequestError(
             'Product price is less than minimum order value',

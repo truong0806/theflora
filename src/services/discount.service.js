@@ -173,6 +173,8 @@ class DiscountService {
       discount_max_value,
       discount_product_ids,
       discount_value,
+      discount_applies_to,
+      discount_min_order_value,
     } = foundDiscount
 
     validateDiscount(foundDiscount)
@@ -192,18 +194,30 @@ class DiscountService {
     const totalPriceApplyDiscount = await products.reduce(
       (acc, product) => {
         let totalDiscount = 0
-        if (discount_product_ids.includes(product.productId)) {
+        let productTotalPrice = product.price * product.quantity
+
+        if (productTotalPrice < discount_min_order_value)
+          throw new BadRequestError(
+            'Product price is less than minimum order value',
+          )
+
+        let isDiscountApplicable =
+          discount_applies_to === 'all' ||
+          discount_product_ids.includes(product.productId)
+
+        if (isDiscountApplicable) {
           const priceAfterApplyDis = calculateDiscountAmount(
             discount_type,
             discount_value,
             discount_max_value,
-            product.price * product.quantity,
+            productTotalPrice,
           )
           totalDiscount += priceAfterApplyDis.amount
           acc.totalPriceDis += priceAfterApplyDis.totalPrice
         } else {
-          acc.totalPriceDis += product.price * product.quantity
+          acc.totalPriceDis += productTotalPrice
         }
+
         acc.totalDiscount += totalDiscount
         return acc
       },

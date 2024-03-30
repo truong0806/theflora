@@ -39,6 +39,7 @@ class CheckoutFactory {
             shopId,
             products: checkProductServer,
           })
+
         itemCheckout.priceApplyDiscount += totalPriceAfterDis
         checkout_order.totalDiscount += discount
       } else {

@@ -1,8 +1,11 @@
 const { BadRequestError } = require('../core/error.response')
+const { cart } = require('../models/cart.model')
+const { order } = require('../models/order.model')
 const { findCartById } = require('../models/repositories/cart.repo')
 const { calculateTotalOrder } = require('../models/repositories/checkout.repo')
 const { checkProduct } = require('../models/repositories/product.repo')
 const { getDiscountAmount } = require('./discount.service')
+const { acquireLock, releaseLock } = require('./redis.service')
 
 class CheckoutFactory {
   static async checkoutReview({ cartId, userId, cart_products = [] }) {
@@ -16,7 +19,7 @@ class CheckoutFactory {
         totalDiscount: 0,
         totalCheckout: 0,
       },
-      shop_order_id_new = []
+      cart_products_new = []
 
     //Sum the total price and fee
     for (const element of cart_products) {
@@ -48,13 +51,52 @@ class CheckoutFactory {
       //Final total price
       checkout_order.totalCheckout += itemCheckout.priceApplyDiscount
       checkout_order.totalprice += totalPrice
-      shop_order_id_new.push(itemCheckout)
+      cart_products_new.push(itemCheckout)
     }
     return {
       cart_products,
-      shop_order_id_new,
+      cart_products_new,
       checkout_order,
     }
+  }
+  static async finalOrderByUser({
+    cart_products_new,
+    cartId,
+    userId,
+    user_address = {},
+    user_payment = {},
+  }) {
+    const { checkout_order } = await CheckoutFactory.checkoutReview({
+      cartId,
+      userId,
+      cart_products: cart_products_new,
+    })
+    const products = await cart_products_new.flatmap(
+      (item) => item.item_product,
+    )
+    const acquireProduct = []
+    for (const product of products) {
+      const { productId, quantity } = product
+      const keylock = await acquireLock(productId, quantity, cartId)
+      acquireProduct.push(Boolean(keylock))
+      if (keylock) {
+        await releaseLock(keylock)
+      }
+    }
+    if (acquireProduct.includes(false)) {
+      throw new BadRequestError('Some products are not available')
+    }
+    const newOrder = order.create({
+      order_userrId: userId,
+      order_checkout: checkout_order,
+      order_shipping: user_address,
+      order_payment: user_payment,
+      order_products: cart_products_new,
+    })
+    if (newOrder) {
+      await cart.deleteOne({ _id: cartId })
+    }
+    return newOrder
   }
 }
 module.exports = CheckoutFactory

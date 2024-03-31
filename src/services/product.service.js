@@ -10,7 +10,10 @@ const {
   updateProductById,
   findProductByIdAdmin,
 } = require('../models/repositories/product.repo')
-const { createInventory } = require('../models/repositories/inventory.repo')
+const {
+  createInventory,
+  updateInventory,
+} = require('../models/repositories/inventory.repo')
 const {
   removeUndefined,
   updateNestedObjectParse,
@@ -135,7 +138,19 @@ class Product {
     return newProduct
   }
   async updateProduct(productId, bodyUpdate) {
-    return await updateProductById({ productId, bodyUpdate, model: product })
+    const updatedProduct = await updateProductById({
+      productId,
+      bodyUpdate,
+      model: product,
+    })
+    if (updatedProduct) {
+      await updateInventory({
+        productId,
+        shopId: this.product_shop,
+        stock: this.product_quantity,
+      })
+    }
+    return updatedProduct
   }
 }
 class Clothing extends Product {

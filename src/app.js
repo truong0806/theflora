@@ -37,8 +37,8 @@ app.use(express.urlencoded({ extended: true }))
 
 //database
 require('./dbs/init.mongoosedb')
-const redis = require('./dbs/init.redis')
-redis.initRedis()
+require('./dbs/init.redis.lv1')
+
 
 //routes
 

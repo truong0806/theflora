@@ -123,13 +123,30 @@ const checkProduct = async ({ listProduct }) => {
         product_id: product.productId,
         select: ['_id', 'product_price'],
       })
-      console.log('🚀 ~ listProduct.map ~ foundProduct:', foundProduct)
       if (foundProduct) {
         return {
           price: foundProduct.product_price,
           quantity: product.quantity,
           productId: product.productId,
         }
+      }
+    }),
+  )
+}
+
+const checkStockProduct = async ({ listProduct }) => {
+  return await Promise.all(
+    listProduct.map(async (product) => {
+      const foundProduct = await findProductById({
+        product_id: product.productId,
+        select: ['_id', 'product_quantity'],
+      })
+      if (listProduct.quantity > foundProduct.product_quantity) {
+        throw new BadRequestError('Out of stock')
+      }
+      return {
+        quantity: product.quantity,
+        productId: product.productId,
       }
     }),
   )
@@ -145,4 +162,5 @@ module.exports = {
   updateProductById,
   findProductByIdAdmin,
   checkProduct,
+  checkStockProduct,
 }

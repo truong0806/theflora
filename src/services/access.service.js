@@ -152,7 +152,6 @@ class AccessService {
   }
 
   static handlerRefeshTokenV2 = async ({ refreshToken, user, keyStore }) => {
-    console.log('🚀 ~ AccessService ~ handlerRefeshTokenV2= ~ user:', user)
     const { userId, email } = user
     if (keyStore.refreshTokenUsed.includes(refreshToken)) {
       await KeyTokenService.removeKeyTokenByUserId(userId)
@@ -209,7 +208,6 @@ class AccessService {
         .select(unSelectData(['__v', 'password']))
         .lean()
       const count = await shopModel.countDocuments()
-      console.log('🚀 ~ AccessService ~ getShop= ~ count:', count)
       return { count, shop }
     } catch (error) {
       return {
@@ -220,7 +218,6 @@ class AccessService {
     }
   }
   static deleteShop = async ( id ) => {
-    console.log("🚀 ~ AccessService ~ staticdeleteShop ~ id:", id)
     try {
       const deletedShop = await shopModel.findByIdAndDelete(ConvertToObjectId(id))
       if (!deletedShop) {

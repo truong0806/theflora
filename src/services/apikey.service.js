@@ -14,7 +14,6 @@ const createapikey = async (permissions) => {
   return newOj
 }
 const deleteapikey = async (_id) => {
-  console.log("🚀 ~ deleteapikey ~ _id:", _id)
   const objKey = await apiKeyModel.findByIdAndDelete({
     _id
   })

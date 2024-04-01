@@ -1,5 +1,6 @@
 'use strict'
 
+const { BadRequestError } = require('../../core/error.response')
 const {
   ConvertToObjectId,
   unSelectData,
@@ -19,7 +20,6 @@ const findProductShopByStatus = async ({ query, limit, skip }) => {
   return await foundProduct
 }
 const findAllProducts = async ({ limit, sort, page, filter, select }) => {
-  console.log('🚀 ~ findAllProducts ~ limit:', limit)
   const skip = (page - 1) * limit
   const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 }
   const foundProduct = await product
@@ -41,7 +41,6 @@ const findProductByIdAdmin = async ({
 }) => {
   const isAdmin = roles.includes(process.env.PERMISSION_ADMIN)
   const o_id = ConvertToObjectId(product_id)
-  console.log('🚀 ~ o_id:', o_id)
   if (isAdmin) {
     const foundProduct = await product
       .find({ _id: o_id })
@@ -105,6 +104,7 @@ const changeStatusProductShop = async ({ product_shop, product_id }) => {
   const updatedProduct = await foundProduct.save()
   return updatedProduct
 }
+
 const updateProductById = async ({
   productId,
   bodyUpdate,

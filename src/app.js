@@ -28,7 +28,7 @@ app.use(
     ? morgan('combined', { stream: accessLogStream })
     : morgan('dev'),
 )
-app.use(helmet());
+app.use(helmet())
 app.use(compression())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -37,12 +37,12 @@ app.use(express.urlencoded({ extended: true }))
 
 //database
 require('./dbs/init.mongoosedb')
-require('./dbs/init.redis.lv1')
-
-
+const initRedis = require('./dbs/init.redis')
+initRedis.initRedis()
 //routes
 
 const initRoutes = require('./routers')
+
 initRoutes(app)
 
 //error handler
@@ -50,16 +50,15 @@ app.use((next) => {
   const error = new Error('Not Found')
   error.code = 404
   next(error)
-
 })
 
 app.use((error, req, res, next) => {
-  const statusCode = error.status || 500;
+  const statusCode = error.status || 500
   return res.status(statusCode).json({
-    status: "error",
+    status: 'error',
     code: statusCode,
-    message: error.message || "Internal Server Error",
-  });
-});
+    message: error.message || 'Internal Server Error',
+  })
+})
 
 module.exports = app

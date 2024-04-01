@@ -35,7 +35,6 @@ class ProductController {
   getProductBySlug = async (req, res, next) => {
     const roles = req.objKey.permissions
     const slug = req.params.slug
-    console.log('🚀 ~ ProductController ~ getProductBySlug= ~ slug:', slug)
     const response = await productService.findProductBySlug({
       slug,
       roles,

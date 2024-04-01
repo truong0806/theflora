@@ -1,5 +1,6 @@
 // lay ip user
-const client = require('../dbs/init.redis.lv1')
+const redisConf = require('../dbs/init.redis')
+const client = redisConf.initRedis()
 
 const get = async (key) => {
   return new Promise((resolve, reject) => {

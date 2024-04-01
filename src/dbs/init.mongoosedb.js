@@ -3,17 +3,21 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 dotenv.config()
 const db = require('../../config/db')
-
+const redis = require('redis')
+dotenv.config()
+const dbRedis = require('../../config/redis')
+const host = dbRedis.host
+const port = dbRedis.port
 const connectString = db.stringConnect
 class Database {
   constructor() {
     this.connect()
   }
   connect(type = 'mongodb') {
-    if (1 === 1) {
-      mongoose.set('debug', true)
-      mongoose.set('debug', { color: true })
-    }
+    // if (1 === 1) {
+    //   mongoose.set('debug', true)
+    //   mongoose.set('debug', { color: true })
+    // }
     mongoose
       .connect(connectString, {
         maxPoolSize: 50,

@@ -15,7 +15,6 @@ const HEADER = {
 const apiKey = async (req, res, next) => {
   try {
     const key = req.headers[HEADER.API_KEY]?.toString()
-    console.log('🚀 ~ apiKey ~ key:', key)
 
     if (!key) {
       return res.status(401).json({
@@ -46,10 +45,6 @@ const permission = (permission) => {
         req.headers['x-forwarded-for'] ||
         req.connection.remoteAddress
       req.body.userIp = userIp ? userIp.replace('::ffff:', '') : ''
-      console.log(
-        '🚀 ~ return ~ req.objKey.permissions:',
-        req.objKey.permissions,
-      )
       if (!req.objKey.permissions) {
         return res.status(403).json({
           code: '403',
@@ -57,7 +52,6 @@ const permission = (permission) => {
         })
       }
       const isPermission = await req.objKey.permissions.includes(permission)
-      console.log('🚀 ~ return ~ isPermission1:', isPermission)
       if (!isPermission) {
         return res.status(403).json({
           code: '403',
@@ -109,7 +103,6 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
 })
 const authentication = asyncHandler(async (req, res, next) => {
   const userId = req.headers[HEADER.CLIENT_ID]?.toString()
-  console.log('🚀 ~ authentication ~ userId:', userId)
   if (!userId) {
     throw new AuthFailureError('Authentication error')
   }

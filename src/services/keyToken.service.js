@@ -11,7 +11,6 @@ class KeyTokenService {
     refreshToken,
     userIp,
   }) => {
-    console.log("🚀 ~ KeyTokenService ~ userId:", userId)
     try {
       const filter = { user: userId };
       const update = {

@@ -71,13 +71,14 @@ class CheckoutFactory {
       userId,
       cart_products: cart_products_new,
     })
-    const products = await cart_products_new.flatmap(
+    const products = await cart_products_new.flatMap(
       (item) => item.item_product,
     )
     const acquireProduct = []
     for (const product of products) {
       const { productId, quantity } = product
       const keylock = await acquireLock(productId, quantity, cartId)
+      console.log("🚀 ~ CheckoutFactory ~ keylock:", keylock)
       acquireProduct.push(Boolean(keylock))
       if (keylock) {
         await releaseLock(keylock)

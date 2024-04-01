@@ -6,6 +6,7 @@ const { updateCartProductQuantity, createCart, getUserCart, deleteUserCart, find
 class CartService {
 
   static async addToCart({ userId, products }) {
+    console.log("🚀 ~ CartService ~ addToCart ~ products:", products)
     const foundCart = await findCartByUserId(userId)
     let listProduct = await ValidateProductBeforeAddToCart(products)
     if (foundCart && products.length > 0) {

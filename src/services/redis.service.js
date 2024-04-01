@@ -1,11 +1,14 @@
-const { setnx } = require('../utils/redis.util')
+const { getRedis } = require('../dbs/init.redis')
+const { instanceConnect: redisClient } = getRedis()
+const { setnx, expire } = require('../utils/redis.util')
+
 const acquireLock = async (productId, quantity, cartId) => {
   const key = `lock_v2023_${productId}`
   const retryTimes = 10
   const expireTime = 3000
 
   for (let i = 0; i < retryTimes; i++) {
-    const result = await setnx(key, expireTime)
+    const result = await setnx(key, 'lock_v2023')
     console.log(`result::`, result)
 
     if (result === 1) {
@@ -15,7 +18,7 @@ const acquireLock = async (productId, quantity, cartId) => {
         cartId,
       })
       if (inventoryReservation.modifiedCount) {
-        await pexpire(key, expireTime)
+        await expire(key, expireTime)
         return key
       }
       return null
@@ -26,8 +29,8 @@ const acquireLock = async (productId, quantity, cartId) => {
 }
 
 const releaseLock = async (keylock) => {
-  const delAsynckey = promisify(instanceRedis.del).bind(instanceRedis)
-  return await delAsynckey(keylock)
+  const delAsync = promisify(redisClient.del).bind(redisClient) // Use del directly, it's already promisified
+  return await delAsync(keylock)
 }
 
 module.exports = {

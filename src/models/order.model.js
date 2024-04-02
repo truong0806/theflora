@@ -5,7 +5,7 @@ const COLLECTION_NAME = 'Orders'
 // Declare the Schema of the Mongo model
 var orderSchema = new mongoose.Schema(
   {
-    order_userrId: { type: String, required: true },
+    order_userId: { type: String, required: true },
     order_checkout: { type: Object, required: true },
     // order_checkout : {
     //     totalPrice,

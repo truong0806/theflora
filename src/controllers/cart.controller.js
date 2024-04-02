@@ -24,17 +24,34 @@ class CartController {
       },
     }).send(res)
   }
+  /**
+   * Get the user's cart.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {Function} next - The next middleware function.
+   * @returns {Promise<void>} - A promise that resolves when the user's cart is retrieved.
+   */
   getCart = async (req, res, next) => {
     const { userId } = req.user
-    console.log('🚀 ~ CartController ~ getCart= ~ userId:', userId)
+    const cart = await cartService.getUserCart(userId)
     new OK({
-      data: await cartService.getUserCart(userId),
+      data: cart,
     }).send(res)
   }
+  /**
+   * Delete the user's cart.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {Function} next - The next middleware function.
+   * @returns {Promise<void>} - A promise that resolves when the user's cart is deleted.
+   */
   deleteCart = async (req, res, next) => {
     const { userId } = req.user
+    const result = await cartService.deleteUserCart(userId)
     new OK({
-      data: await cartService.deleteUserCart(userId),
+      data: result,
     }).send(res)
   }
 }

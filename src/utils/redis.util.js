@@ -1,6 +1,5 @@
-// lay ip user
-const redisConf = require('../dbs/init.redis')
-const client = redisConf.initRedis()
+const { getRedis } = require('../dbs/init.redis')
+const { instanceConnect: client } = getRedis()
 
 const get = async (key) => {
   return new Promise((resolve, reject) => {
@@ -28,9 +27,9 @@ const set = async (key, value) => {
 }
 
 // set 1 lan duy nhat
-const setnx = async (key, value) => {
+const setnx = (key, value) => {
   return new Promise((resolve, reject) => {
-    client.setnx(key, value, (err, data) => {
+    client.set(key, value, (err, data) => {
       if (err) {
         return reject(err)
       }

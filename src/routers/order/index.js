@@ -9,6 +9,7 @@ const { apiKey, permission, authentication } = require('../../auth/checkAuth')
 routes.use(apiKey)
 routes.post(
   '/',
+  authentication,
   permission(process.env.PERMISSION_ADMIN),
   asyncHandler(orderController.createOrder),
 )

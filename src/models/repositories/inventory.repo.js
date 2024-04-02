@@ -25,7 +25,7 @@ const updateInventory = async ({ productId, quantity, shopId }) => {
 const reservationInventory = async ({ productId, quantity, cartId }) => {
   const query = {
       inven_product_id: ConvertToObjectId(productId),
-      inven_stock: { $qte: quantity },
+      inven_stock: { $gte: quantity },
     },
     updateSet = {
       $inc: {
@@ -38,8 +38,8 @@ const reservationInventory = async ({ productId, quantity, cartId }) => {
           createOn: new Date(),
         },
       },
-      options: { upsert: true, new: true },
-    }
+    },
+    options = { upsert: true, new: false }
   return await inventory.updateOne(query, updateSet, options)
 }
 module.exports = {

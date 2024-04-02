@@ -46,6 +46,9 @@ const initRedis = () => {
   })
 }
 const getRedis = () => client
+
+
+
 const closeRedis = () => {
   if (client.instanceConnect) {
     client.instanceConnect.quit()

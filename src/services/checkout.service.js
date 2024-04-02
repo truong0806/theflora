@@ -1,6 +1,6 @@
 const { BadRequestError } = require('../core/error.response')
-const { cart } = require('../models/cart.model')
-const { order } = require('../models/order.model')
+const cart = require('../models/cart.model')
+const order = require('../models/order.model')
 const { findCartById } = require('../models/repositories/cart.repo')
 const { calculateTotalOrder } = require('../models/repositories/checkout.repo')
 const { checkProduct } = require('../models/repositories/product.repo')
@@ -59,13 +59,10 @@ class CheckoutFactory {
       checkout_order,
     }
   }
-  static async finalOrderByUser({
-    cart_products_new,
-    cartId,
+  static async finalOrderByUser(
+    { cart_products_new, cartId, user_address = {}, user_payment = {} },
     userId,
-    user_address = {},
-    user_payment = {},
-  }) {
+  ) {
     const { checkout_order } = await CheckoutFactory.checkoutReview({
       cartId,
       userId,
@@ -78,8 +75,7 @@ class CheckoutFactory {
     for (const product of products) {
       const { productId, quantity } = product
       const keylock = await acquireLock(productId, quantity, cartId)
-      console.log("🚀 ~ CheckoutFactory ~ keylock:", keylock)
-      acquireProduct.push(Boolean(keylock))
+      acquireProduct.push(keylock ? 1 : 0)
       if (keylock) {
         await releaseLock(keylock)
       }
@@ -87,15 +83,24 @@ class CheckoutFactory {
     if (acquireProduct.includes(false)) {
       throw new BadRequestError('Some products are not available')
     }
-    const newOrder = order.create({
-      order_userrId: userId,
+    const newOrder = await order.create({
+      order_userId: userId,
       order_checkout: checkout_order,
       order_shipping: user_address,
       order_payment: user_payment,
       order_products: cart_products_new,
     })
     if (newOrder) {
-      await cart.deleteOne({ _id: cartId })
+      const query = {
+          _id: cartId,
+          cart_userId: userId,
+        },
+        update = {
+          $set: {
+            cart_products: [],
+          },
+        }
+      await cart.updateOne(query, update)
     }
     return newOrder
   }

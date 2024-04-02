@@ -1,29 +1,33 @@
 const cartModel = require('../models/cart.model')
 const { findProductById } = require('../models/repositories/product.repo')
 const { ValidateProductBeforeAddToCart } = require('../utils')
-const { updateCartProductQuantity, createCart, getUserCart, deleteUserCart, findCartByUserId } = require('../models/repositories/cart.repo')
+const {
+  updateCartProductQuantity,
+  createCart,
+  getUserCart,
+  deleteUserCart,
+  findCartByUserId,
+} = require('../models/repositories/cart.repo')
 
 class CartService {
-
   static async addToCart({ userId, products }) {
-    console.log("🚀 ~ CartService ~ addToCart ~ products:", products)
+    console.log('🚀 ~ CartService ~ addToCart ~ products:', products)
     const foundCart = await findCartByUserId(userId)
     let listProduct = await ValidateProductBeforeAddToCart(products)
     if (foundCart && products.length > 0) {
-      return await updateCartProductQuantity({ userId, listProduct, foundCart })
-    } else if (foundCart.cart_products.length === 0) {
       return await cartModel.findOneAndUpdate(
         { cart_userId: userId },
         { cart_products: listProduct },
         { new: true },
       )
+      // return await updateCartProductQuantity({ userId, listProduct, foundCart })
     } else {
       return await createCart({ userId, listProduct })
     }
   }
   static async addToCartV2(userId, { shop_order_Id }) {
     const { productId, quantity, ol_quantity } =
-      shop_order_Id[0]?.item_product[0] ?? {};
+      shop_order_Id[0]?.item_product[0] ?? {}
     const foundCart = await cartModel.findOne({ cart_userId: userId })
     if (!foundCart) {
       return await this.createCart({
@@ -45,7 +49,7 @@ class CartService {
     if (quantity === 0) {
       ///delete
     }
-    
+
     for (let item of shop_order_Id) {
       const { item_product } = item
       for (let product of item_product) {
@@ -69,7 +73,10 @@ class CartService {
     })
   }
   static async getUserCart(userId) {
-    return await getUserCart({ userId, select: ["cart_userId", "cart_count_product", "cart_products"] })
+    return await getUserCart({
+      userId,
+      select: ['cart_userId', 'cart_count_product', 'cart_products'],
+    })
   }
   static async deleteUserCart(userId) {
     return await deleteUserCart(userId)

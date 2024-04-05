@@ -2,6 +2,7 @@ const accessRouter = require('./access')
 const checkoutRouter = require('./checkout')
 const orderRouter = require('./order')
 const productRouter = require('./product')
+const commentRouter = require('./comment')
 const discountRouter = require('./discount')
 const cartRouter = require('./cart')
 const { pushLogToDiscord } = require('../middleware')
@@ -14,6 +15,7 @@ const initRoutes = (app) => {
   app.use('/api/v1/shop', accessRouter)
   app.use('/api/v1/checkout', checkoutRouter)
   app.use('/api/v1/order', orderRouter)
+  app.use('/api/v1/comment', commentRouter)
 }
 
 module.exports = initRoutes

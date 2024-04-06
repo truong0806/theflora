@@ -1,3 +1,4 @@
+const { BadRequestError } = require('../core/error.response')
 const Comment = require('../models/comment.model')
 const { findProductById } = require('../models/repositories/product.repo')
 const { ConvertToObjectId } = require('../utils/mongoose/mongoose')
@@ -29,7 +30,7 @@ class CommentService {
     if (parentId) {
       const parentComment = await Comment.findById(parentId)
       if (!parentComment) {
-        throw new Error('Parent comment not found')
+        throw new BadRequestError('Parent comment not found')
       }
       rightValue = parentComment.comment_right
       const updateRight = await Comment.updateMany(
@@ -94,7 +95,7 @@ class CommentService {
     if (parentId) {
       const foundParent = await Comment.findById(parentId)
       if (!foundParent) {
-        throw new Error('Parent comment not found')
+        throw new BadRequestError('Parent comment not found')
       }
       const foundComment = await Comment.find({
         comment_productId: ConvertToObjectId(productId),
@@ -123,6 +124,56 @@ class CommentService {
       .sort({ comment_left: 1 })
       .lean()
     return foundComment
+  }
+  static async deleteComment({ commentId, productId }) {
+    const product = await findProductById({
+      product_id: productId,
+      select: ['_id'],
+      isPublished: true,
+    })
+    if (!product) {
+      throw new BadRequestError('Product not found')
+    }
+    const comment = await Comment.findById(commentId)
+    if (!comment) {
+      throw new BadRequestError('Comment not found')
+    }
+    const width = comment.comment_right - comment.comment_left + 1
+    await Comment.deleteMany({
+      comment_productId: ConvertToObjectId(productId),
+      comment_left: { $gte: comment.comment_left, $lte: comment.comment_right },
+    })
+    await Comment.updateMany(
+      {
+        comment_productId: ConvertToObjectId(productId),
+        comment_right: { $gt: comment.comment_right },
+      },
+      { $inc: { comment_right: -width } },
+    )
+    await Comment.updateMany(
+      {
+        comment_productId: ConvertToObjectId(productId),
+        comment_left: { $gt: comment.comment_left },
+      },
+      { $inc: { comment_left: -width } },
+    )
+  }
+  static async updateComment({ commentId, content, productId }) {
+    const product = await findProductById({
+      product_id: productId,
+      select: ['_id'],
+      isPublished: true,
+    })
+    if (!product) {
+      throw new BadRequestError('Product not found')
+    }
+    const comment = await Comment.findById(commentId)
+    if (!comment) {
+      throw new BadRequestError('Comment not found')
+    }
+    comment.comment_content = content
+    await comment.save()
+    return comment
   }
 }
 module.exports = CommentService

@@ -9,5 +9,12 @@ const pushLogToDiscord = async (req, res, next) => {
     return next(error)
   }
 }
+const logErrorToDiscord = async (err, req, res, next) => {
+  // Log the error to Discord
+  Logger.sendMessage(`Error: ${err.message}\nStack: ${err.stack}`)
 
-module.exports = { pushLogToDiscord }
+  // Pass the error to the next middleware function
+  next(err)
+}
+
+module.exports = { pushLogToDiscord, logErrorToDiscord }

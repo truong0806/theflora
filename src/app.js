@@ -45,6 +45,9 @@ const initRoutes = require('./routers')
 
 initRoutes(app)
 
+///schedules
+require('./schedules/deleteInactiveImages')
+
 //error handler
 app.use((next) => {
   const error = new Error('Not Found')

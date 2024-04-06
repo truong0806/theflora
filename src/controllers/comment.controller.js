@@ -13,6 +13,14 @@ class CommentController {
     const data = await CommentService.getComment(req.body)
     new OK({ data: data }).send(res)
   }
+  delete = async (req, res) => {
+    const data = await CommentService.deleteComment(req.body)
+    new OK({ data: data }).send(res)
+  }
+  update = async (req, res) => {
+    const data = await CommentService.updateComment(req.body)
+    new OK({ data: data }).send(res)
+  }
 }
 
 module.exports = new CommentController()

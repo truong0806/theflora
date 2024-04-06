@@ -17,5 +17,15 @@ routes.get(
   permission(process.env.PERMISSION_USER),
   asyncHandler(CommentController.getComment),
 )
+routes.delete(
+  '',
+  permission(process.env.PERMISSION_USER),
+  asyncHandler(CommentController.delete),
+)
+routes.patch(
+  '',
+  permission(process.env.PERMISSION_USER),
+  asyncHandler(CommentController.update),
+)
 
 module.exports = routes

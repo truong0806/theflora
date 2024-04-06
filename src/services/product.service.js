@@ -18,6 +18,8 @@ const {
   removeUndefined,
   updateNestedObjectParse,
 } = require('../utils/mongoose')
+const { pushNotiToSystem } = require('./notification.service')
+const constants = require('../utils/constains')
 
 class ProductFactory {
   static productRegistry = {}
@@ -134,6 +136,17 @@ class Product {
         shopId: this.product_shop,
         stock: this.product_quantity,
       })
+      pushNotiToSystem({
+        type: constants.noti.NOTI_TYPE_PRODUCT_CREATE_SUCCESS,
+        receivedId: 1,
+        senderId: this.product_shop,
+        options: {
+          product_name: this.product_name,
+          shop_name: this.product_shop,
+        },
+      })
+        .then((rs) => console.log(rs))
+        .catch((err) => console.log(err))
     }
     return newProduct
   }

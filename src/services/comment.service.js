@@ -33,7 +33,7 @@ class CommentService {
         throw new BadRequestError('Parent comment not found')
       }
       rightValue = parentComment.comment_right
-      const updateRight = await Comment.updateMany(
+      await Comment.updateMany(
         {
           comment_productId: ConvertToObjectId(productId),
           comment_right: { $gte: rightValue },
@@ -42,11 +42,7 @@ class CommentService {
           $inc: { comment_right: 2 },
         },
       )
-      console.log(
-        '🚀 ~ CommentService ~ createComment ~ updateRight:',
-        updateRight,
-      )
-      const updateLeft = await Comment.updateMany(
+      await Comment.updateMany(
         {
           comment_productId: ConvertToObjectId(productId),
           comment_left: { $gte: rightValue },
@@ -54,10 +50,6 @@ class CommentService {
         {
           $inc: { comment_left: 2 },
         },
-      )
-      console.log(
-        '🚀 ~ CommentService ~ createComment ~ updateLeft:',
-        updateLeft,
       )
     } else {
       const maxRightValue = await Comment.findOne(

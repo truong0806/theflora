@@ -20,7 +20,7 @@ const {
 } = require('../utils/mongoose')
 const { pushNotiToSystem } = require('./notification.service')
 const constants = require('../utils/constains')
-
+const mongoose = require('mongoose')
 class ProductFactory {
   static productRegistry = {}
 
@@ -145,25 +145,45 @@ class Product {
           shop_name: this.product_shop,
         },
       })
-        .then((rs) => console.log(rs))
+        .then(() => console.log('Push noti success'))
         .catch((err) => console.log(err))
     }
     return newProduct
   }
   async updateProduct(productId, bodyUpdate) {
-    const updatedProduct = await updateProductById({
-      productId,
-      bodyUpdate,
-      model: product,
-    })
-    if (updatedProduct) {
-      await updateInventory({
-        productId,
-        shopId: this.product_shop,
-        stock: this.product_quantity,
-      })
+    const session = await mongoose.startSession()
+    session.startTransaction()
+    try {
+      const updatedProduct = await updateProductById(
+        {
+          productId,
+          bodyUpdate,
+          model: product,
+        },
+        { session },
+      )
+
+      const updateInvent = await updateInventory(
+        {
+          productId,
+          shopId: updatedProduct.product_shop,
+          quantity: updatedProduct.product_quantity,
+        },
+        { session },
+      )
+
+      if (!updatedProduct || !updateInvent) {
+        throw new BadRequestError('Update product failed')
+      }
+
+      await session.commitTransaction()
+      await session.endSession()
+      return updatedProduct
+    } catch (error) {
+      await session.abortTransaction()
+      session.endSession()
+      throw error
     }
-    return updatedProduct
   }
 }
 class Clothing extends Product {
@@ -188,7 +208,7 @@ class Clothing extends Product {
         productId,
         bodyUpdate: updateNestedObjectParse(objectParams.product_attributes),
         objectParams,
-        model: electric,
+        model: clothing,
       })
     }
     const updated = await super.updateProduct(

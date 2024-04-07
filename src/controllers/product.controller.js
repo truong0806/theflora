@@ -174,6 +174,10 @@ class ProductController {
     if (!response) {
       throw new Error('Update product failed')
     }
+    new Updated({
+      message: 'Update product successfully',
+      data: response,
+    }).send(res)
   }
 }
 

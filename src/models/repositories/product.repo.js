@@ -7,6 +7,7 @@ const {
   getSelectData,
 } = require('../../utils/mongoose/mongoose')
 const { product } = require('../product.model')
+const { updateInventory } = require('./inventory.repo')
 
 const findProductShopByStatus = async ({ query, limit, skip }) => {
   const foundProduct = await product
@@ -60,7 +61,6 @@ const findProductById = async ({ product_id, select }) => {
   return await product.findById(product_id).select(select).exec()
 }
 const findProductBySlug = async ({ slug, roles, unselect }) => {
-  console.log('🚀 ~ findProductBySlug ~ slug:', slug)
   const isAdmin = roles.includes(process.env.PERMISSION_ADMIN)
   if (isAdmin) {
     const foundProduct = await product
@@ -105,15 +105,15 @@ const changeStatusProductShop = async ({ product_shop, product_id }) => {
   return updatedProduct
 }
 
-const updateProductById = async ({
-  productId,
-  bodyUpdate,
-  model,
-  isNew = true,
-}) => {
+const updateProductById = async (
+  { productId, bodyUpdate, model, isNew = true },
+  { session },
+) => {
   const update = await model.findByIdAndUpdate(productId, bodyUpdate, {
-    new: isNew,
+    isNew: isNew,
+    session: session,
   })
+ 
   return update
 }
 const checkProduct = async ({ listProduct }) => {

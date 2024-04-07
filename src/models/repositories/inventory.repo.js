@@ -9,18 +9,22 @@ const createInventory = async ({ productId, shopId, stock }) => {
   })
   return newInventory
 }
-const updateInventory = async ({ productId, quantity, shopId }) => {
-  const query = {
+const updateInventory = async (
+  { productId, quantity, shopId },
+  { session },
+) => {
+  const foundInvent = await inventory
+    .findOne({
       inven_product_id: ConvertToObjectId(productId),
-      inven_stock: { $qte: quantity },
-    },
-    updateSet = {
-      $inc: {
-        inven_stock: quantity,
-      },
-      options: { upsert: true, new: true },
-    }
-  return await inventory.updateOne(query, updateSet, options)
+      invent_shopId: ConvertToObjectId(shopId),
+    })
+    .session(session)
+  if (!foundInvent) {
+    throw new BadRequestError('Update inventory in product failed')
+  }
+  Object.assign(foundInvent, { inven_stock: quantity })
+  const updatedInvent = await foundInvent.save({ session })
+  return updatedInvent
 }
 const reservationInventory = async ({ productId, quantity, cartId }) => {
   const query = {

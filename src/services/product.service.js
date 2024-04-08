@@ -13,6 +13,7 @@ const {
 const {
   createInventory,
   updateInventory,
+  updateInventoryStock,
 } = require('../models/repositories/inventory.repo')
 const {
   removeUndefined,
@@ -21,6 +22,8 @@ const {
 const { pushNotiToSystem } = require('./notification.service')
 const constants = require('../utils/constains')
 const mongoose = require('mongoose')
+const inventoryModel = require('../models/inventory.model')
+const { ConvertToObjectId } = require('../utils/mongoose/mongoose')
 class ProductFactory {
   static productRegistry = {}
 
@@ -40,6 +43,7 @@ class ProductFactory {
     if (!productClass) {
       throw new BadRequestError('Product type not found')
     }
+
     return await new productClass(payload).updateProduct(productId)
   }
 
@@ -151,34 +155,37 @@ class Product {
     return newProduct
   }
   async updateProduct(productId, bodyUpdate) {
+    const foundProduct = await findProductById({ product_id: productId })
+    if (!foundProduct) {
+      throw new Error('Product not found')
+    }
     const session = await mongoose.startSession()
     session.startTransaction()
     try {
-      const updatedProduct = await updateProductById(
-        {
-          productId,
-          bodyUpdate,
-          model: product,
-        },
-        { session },
-      )
+      const opts = { session, new: true }
 
-      const updateInvent = await updateInventory(
-        {
-          productId,
-          shopId: updatedProduct.product_shop,
-          quantity: updatedProduct.product_quantity,
-        },
-        { session },
-      )
+      console.log('🚀 ~ Product ~ updateProduct ~ productId:', productId)
+      // Assuming you have productId
+      const productUpdate = await updateProductById({
+        productId,
+        bodyUpdate,
+        model: product,
+        opts,
+      })
+      const inventory = await updateInventoryStock({
+        productId,
+        stock: bodyUpdate.product_quantity,
+        shopId: bodyUpdate.product_shop,
+        opts,
+      })
 
-      if (!updatedProduct || !updateInvent) {
-        throw new BadRequestError('Update product failed')
+      if (!productUpdate || !inventory) {
+        throw new Error('Update failed')
       }
 
       await session.commitTransaction()
       await session.endSession()
-      return updatedProduct
+      return productUpdate
     } catch (error) {
       await session.abortTransaction()
       session.endSession()

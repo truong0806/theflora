@@ -36,6 +36,7 @@
     "node-cron": "^3.0.3",
     "pm2": "^5.3.1",
     "redis": "^4.6.13",
+    "rosie": "^2.1.1",
     "rotating-file-stream": "^3.2.1",
     "slug": "^8.2.3",
     "supertest": "^6.3.4",

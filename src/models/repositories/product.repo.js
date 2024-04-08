@@ -105,15 +105,9 @@ const changeStatusProductShop = async ({ product_shop, product_id }) => {
   return updatedProduct
 }
 
-const updateProductById = async (
-  { productId, bodyUpdate, model, isNew = true },
-  { session },
-) => {
-  const update = await model.findByIdAndUpdate(productId, bodyUpdate, {
-    isNew: isNew,
-    session: session,
-  })
- 
+const updateProductById = async ({ productId, bodyUpdate, model, opts }) => {
+  const update = await model.findByIdAndUpdate(productId, bodyUpdate, opts)
+
   return update
 }
 const checkProduct = async ({ listProduct }) => {

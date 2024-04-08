@@ -162,10 +162,12 @@ class ProductController {
   updateProductById = async (req, res, next) => {
     const { product_type } = req.body
     const { productId } = req.params
+    const { userId } = req.user
     const updateData = {
       ...req.body,
-      product_shop: req.user.userId,
+      product_shop: userId,
     }
+    
     const response = await productService.updateProduct(
       product_type,
       productId,

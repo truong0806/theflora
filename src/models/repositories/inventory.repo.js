@@ -26,6 +26,17 @@ const updateInventory = async (
   const updatedInvent = await foundInvent.save({ session })
   return updatedInvent
 }
+const updateInventoryStock = async ({ productId, stock, shopId, opts }) => {
+  const inventoryUpdated = await inventory.findOneAndUpdate(
+    {
+      inven_product_id: ConvertToObjectId(productId),
+      invent_shopId: ConvertToObjectId(shopId),
+    },
+    { inven_stock: stock },
+    opts,
+  )
+  return inventoryUpdated
+}
 const reservationInventory = async ({ productId, quantity, cartId }) => {
   const query = {
       inven_product_id: ConvertToObjectId(productId),
@@ -50,4 +61,5 @@ module.exports = {
   createInventory,
   updateInventory,
   reservationInventory,
+  updateInventoryStock,
 }

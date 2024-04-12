@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
+    "amqplib": "^0.10.4",
     "autocannon": "^7.15.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.1.0",

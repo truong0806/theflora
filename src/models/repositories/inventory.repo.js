@@ -27,6 +27,7 @@ const updateInventory = async (
   return updatedInvent
 }
 const updateInventoryStock = async ({ productId, stock, shopId, opts }) => {
+  opts.upsert = true
   const inventoryUpdated = await inventory.findOneAndUpdate(
     {
       inven_product_id: ConvertToObjectId(productId),

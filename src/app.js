@@ -37,8 +37,8 @@ app.use(express.urlencoded({ extended: true }))
 
 //database
 require('./dbs/init.mongoosedb')
-const initRedis = require('./dbs/init.redis')
-initRedis.initRedis()
+// const initRedis = require('./dbs/init.redis')
+// initRedis.initRedis()
 //routes
 
 const initRoutes = require('./routers')
@@ -49,12 +49,11 @@ initRoutes(app)
 require('./schedules/deleteInactiveImages')
 
 //error handler
-app.use((next) => {
-  const error = new Error('Not Found')
-  error.code = 404
-  next(error)
-})
-
+app.use((req, res, next) => {
+  const error = new Error('Not Found');
+  error.status = 404;
+  next(error);
+});
 app.use((error, req, res, next) => {
   const statusCode = error.status || 500
   return res.status(statusCode).json({

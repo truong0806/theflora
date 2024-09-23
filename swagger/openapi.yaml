@@ -1,0 +1,3160 @@
+swagger: '2.0'
+info:
+  contact: {}
+  title: THE FLORA
+  version: 1.0.0
+host: theflora.truongnguyen869.click
+basePath: /
+schemes:
+  - https
+paths:
+  /api/v1/cart:
+    delete:
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Cart
+      description: Delete Cart
+      operationId: deleteCart
+      summary: Delete Cart
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              products:
+                example:
+                  - productId: 65b7f50b2f6be2474d028d10
+                    quantity: 1
+                    shopId: 65b4a038e9d92934ead5b3c5
+                  - productId: 65b7e9a02f6be2474d028c3e
+                    quantity: 2
+                    shopId: 65b4a038e9d92934ead5b3c5
+                  - productId: 65acd807011cc3f44404a45e
+                    quantity: 6
+                    shopId: 65a744954e7912c23e30da8d
+                items:
+                  properties:
+                    productId:
+                      example: 65b7f50b2f6be2474d028d10
+                      type: string
+                    quantity:
+                      example: 1
+                      type: number
+                    shopId:
+                      example: 65b4a038e9d92934ead5b3c5
+                      type: string
+                  type: object
+                type: array
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Cart
+      description: Add to cart
+      operationId: addToCart
+      summary: Add to cart
+  /api/v1/cart/addtocart:
+    patch:
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Cart
+      description: Add Cart V2
+      operationId: addCartV2
+      summary: Add Cart V2
+  /api/v1/cart/getcart:
+    get:
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Cart
+      description: Get Cart
+      operationId: getCart
+      summary: Get Cart
+  /api/v1/checkout/review:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              cartId:
+                example: 660be79ee1a9d53829f0703b
+                type: string
+              cart_products:
+                example:
+                  - item_product:
+                      - productId: 65b7f50b2f6be2474d028d10
+                        product_name: '[Sale Tết] iPhone 15 - Hàng Chính Hãng VN/A'
+                        product_price: 21300000
+                        quantity: 26
+                      - productId: 65b7e9a02f6be2474d028c3e
+                        product_name: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                        product_price: 145000
+                        quantity: 12
+                      - productId: 65acd807011cc3f44404a45e
+                        product_name: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                        product_price: 122222
+                        quantity: 22
+                    shopId: 65b4a038e9d92934ead5b3c5
+                    shop_discount:
+                      - SHOPEENHTG14
+                  - item_product:
+                      - productId: 65acd807011cc3f44404a45e
+                        product_name: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                        product_price: 122222
+                        quantity: 192
+                    shopId: 65a744954e7912c23e30da8d
+                    shop_discount: []
+                items:
+                  properties:
+                    item_product:
+                      example:
+                        - productId: 65b7f50b2f6be2474d028d10
+                          product_name: '[Sale Tết] iPhone 15 - Hàng Chính Hãng VN/A'
+                          product_price: 21300000
+                          quantity: 26
+                        - productId: 65b7e9a02f6be2474d028c3e
+                          product_name: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                          product_price: 145000
+                          quantity: 12
+                        - productId: 65acd807011cc3f44404a45e
+                          product_name: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                          product_price: 122222
+                          quantity: 22
+                      items:
+                        properties:
+                          productId:
+                            example: 65b7f50b2f6be2474d028d10
+                            type: string
+                          product_name:
+                            example: '[Sale Tết] iPhone 15 - Hàng Chính Hãng VN/A'
+                            type: string
+                          product_price:
+                            example: 21300000
+                            type: number
+                          quantity:
+                            example: 26
+                            type: number
+                        type: object
+                      type: array
+                    shopId:
+                      example: 65b4a038e9d92934ead5b3c5
+                      type: string
+                    shop_discount:
+                      example:
+                        - SHOPEENHTG14
+                      items:
+                        example: SHOPEENHTG14
+                        type: string
+                      type: array
+                  type: object
+                type: array
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Checkout
+      description: Checkout Order
+      operationId: checkoutOrder
+      summary: Checkout Order
+  /api/v1/comment:
+    delete:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              commentId:
+                example: 6610fa0361e7bc8b3d52265b
+                type: string
+              productId:
+                example: 65acd807011cc3f44404a45e
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Comment
+      description: Delete comment
+      operationId: deleteComment
+      summary: Delete comment
+    get:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              parentId:
+                example: 660ff771917b49697302a31f
+                type: string
+              productId:
+                example: 65acd807011cc3f44404a45e
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Comment
+      description: Get Comment
+      operationId: getComment
+      summary: Get Comment
+    patch:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              commentId:
+                example: 660ff7b6917b49697302a350
+                type: string
+              content:
+                example: comment 1.2.1.2-abc
+                type: string
+              productId:
+                example: 65acd807011cc3f44404a45e
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Comment
+      description: Update comment
+      operationId: updateComment
+      summary: Update comment
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              content:
+                example: comment 1.1.1.3
+                type: string
+              parentId:
+                example: 6610fa0361e7bc8b3d52265b
+                type: string
+              productId:
+                example: 65acd807011cc3f44404a45e
+                type: string
+              userId:
+                example: 65a2df021f5053c881e43345
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Comment
+      description: Create Comment
+      operationId: createComment
+      summary: Create Comment
+  /api/v1/discount/create:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              applies_to:
+                example: specific
+                type: string
+              code:
+                example: SHOPEENHTG14
+                type: string
+              description:
+                example: description
+                type: string
+              end_date:
+                example: '2024-05-27 09:00:00'
+                type: string
+              max_uses:
+                example: 110
+                type: number
+              max_uses_per_users:
+                example: 1
+                type: number
+              max_value:
+                example: 300000
+                type: number
+              min_order_value:
+                example: 200000
+                type: number
+              name:
+                example: Fixed amount
+                type: string
+              product_ids:
+                example:
+                  - 65b7f50b2f6be2474d028d10
+                items:
+                  example: 65b7f50b2f6be2474d028d10
+                  type: string
+                type: array
+              shopId:
+                example: 65b4a038e9d92934ead5b3c5
+                type: string
+              start_date:
+                example: '2024-04-11 10:02:02'
+                type: string
+              type:
+                example: percent
+                type: string
+              used_count:
+                example: 0
+                type: number
+              value:
+                example: 15
+                type: number
+            type: object
+      responses:
+        '201':
+          description: Create Discount
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  __v:
+                    example: 0
+                    type: number
+                  _id:
+                    example: 65b2ba211a72421737cfb647
+                    type: string
+                  createdAt:
+                    example: '2024-01-25T19:44:33.047Z'
+                    type: string
+                  discount_applies_to:
+                    example: specific
+                    type: string
+                  discount_code:
+                    example: SHOPEENHTGHD
+                    type: string
+                  discount_end_date:
+                    example: '2024-02-26T02:00:00.000Z'
+                    type: string
+                  discount_is_active:
+                    example: true
+                    type: boolean
+                  discount_max_per_user:
+                    example: 1
+                    type: number
+                  discount_max_uses:
+                    example: 120
+                    type: number
+                  discount_max_value:
+                    example: 30000
+                    type: number
+                  discount_min_order_value:
+                    example: 200000
+                    type: number
+                  discount_name:
+                    example: Fixed amount
+                    type: string
+                  discount_producut_ids:
+                    example:
+                      - 65af57fb9a29ed31f30a77fa
+                      - 65ae050ee0b3464845b0f39d
+                    items:
+                      example: 65af57fb9a29ed31f30a77fa
+                      type: string
+                    type: array
+                  discount_shopId:
+                    example: 65a2de581f5053c881e43340
+                    type: string
+                  discount_start_date:
+                    example: '2024-01-26T02:00:00.000Z'
+                    type: string
+                  discount_type:
+                    example: percentage
+                    type: string
+                  discount_used_count:
+                    example: 0
+                    type: number
+                  discount_users_used:
+                    example: []
+                    items: {}
+                    type: array
+                  discount_value:
+                    example: 30000
+                    type: number
+                  distount_description:
+                    example: description
+                    type: string
+                  updatedAt:
+                    example: '2024-01-25T19:44:33.047Z'
+                    type: string
+                type: object
+              message:
+                example: Created
+                type: string
+              options:
+                properties: {}
+                type: object
+              statusCode:
+                example: 201
+                type: number
+            type: object
+      tags:
+        - Discount
+        - Shop
+      description: Create Discount
+      operationId: createDiscount
+      summary: Create Discount
+  /api/v1/discount/productapply:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-clien-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              code:
+                example: SHOPEENHTG12
+                type: string
+              limit:
+                example: '50'
+                type: string
+              page:
+                example: '1'
+                type: string
+              shopId:
+                example: 65a744954e7912c23e30da8d
+                type: string
+            type: object
+      responses:
+        '201':
+          description: Get Product Apply Discount Code
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  count:
+                    example: 1
+                    type: number
+                  foundProduct:
+                    example:
+                      - _id: 65af57fb9a29ed31f30a77fa
+                        product_name: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                        product_shop:
+                          email: admin@gmail.com
+                          name: thanh trường
+                    items:
+                      properties:
+                        _id:
+                          example: 65af57fb9a29ed31f30a77fa
+                          type: string
+                        product_name:
+                          example: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                          type: string
+                        product_shop:
+                          properties:
+                            email:
+                              example: admin@gmail.com
+                              type: string
+                            name:
+                              example: thanh trường
+                              type: string
+                          type: object
+                      type: object
+                    type: array
+                type: object
+              message:
+                example: Created
+                type: string
+              options:
+                properties: {}
+                type: object
+              statusCode:
+                example: 201
+                type: number
+            type: object
+      tags:
+        - Discount
+        - Shop
+      description: Get Product Apply Discount Code
+      operationId: getProductApplyDiscountCode
+      summary: Get Product Apply Discount Code
+  /api/v1/discount/shop/apply:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: status
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-clien-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              code:
+                example: SHOPEENHTGH5
+                type: string
+              products:
+                example:
+                  - productId: 65af57fb9a29ed31f30a77fa
+                    quantity: 2
+                  - productId: 65ae050ee0b3464845b0f39d
+                    quantity: 3
+                items:
+                  properties:
+                    productId:
+                      example: 65af57fb9a29ed31f30a77fa
+                      type: string
+                    quantity:
+                      example: 2
+                      type: number
+                  type: object
+                type: array
+              shopId:
+                example: 65a744954e7912c23e30da8d
+                type: string
+              userId:
+                example: 65a2de581f5053c881e43340
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Get Amount Discount
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Expose-Headers:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  apply:
+                    example: false
+                    type: boolean
+                  discount:
+                    example: 30000
+                    type: number
+                  discountMax:
+                    example: 30000
+                    type: number
+                  totalOrder:
+                    example: 293600
+                    type: number
+                  totalPrice:
+                    example: 263600
+                    type: number
+                  type:
+                    example: percent
+                    type: string
+                  value:
+                    example: 20%
+                    type: string
+                type: object
+              message:
+                example: OK
+                type: string
+              statusCode:
+                example: 200
+                type: number
+            type: object
+        '500':
+          description: Maximum number of uses
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              code:
+                example: 500
+                type: number
+              message:
+                example: You have reached the maximum number of uses for this discount code
+                type: string
+              status:
+                example: error
+                type: string
+            type: object
+      tags:
+        - Discount
+        - Shop
+      description: Apply Discount
+      operationId: applyDiscount
+      summary: Apply Discount
+  /api/v1/discount/shop/cancel:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: status
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-clien-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              code:
+                example: SHOPEENHTGH5
+                type: string
+              shopId:
+                example: 65a2de581f5053c881e43340
+                type: string
+              userId:
+                example: 65a2de581f5053c881e43340
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Apply Discount In Order
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  discount:
+                    example: 30000
+                    type: number
+                  discountMax:
+                    example: 30000
+                    type: number
+                  totalOrder:
+                    example: 293600
+                    type: number
+                  totalPrice:
+                    example: 263600
+                    type: number
+                  type:
+                    example: fix_amount
+                    type: string
+                  value:
+                    example: 30000
+                    type: number
+                type: object
+              message:
+                example: OK
+                type: string
+              statusCode:
+                example: 200
+                type: number
+            type: object
+        '500':
+          description: Maximum number of uses
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              code:
+                example: 500
+                type: number
+              message:
+                example: You have reached the maximum number of uses for this discount code
+                type: string
+              status:
+                example: error
+                type: string
+            type: object
+      tags:
+        - Discount
+        - Shop
+      description: Cancel Discount
+      operationId: cancelDiscount
+      summary: Cancel Discount
+  /api/v1/discount/shop/delete:
+    delete:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: ''
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              code:
+                example: SHOPEENHTGH4
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Discount
+        - Shop
+      description: Delete Discount
+      operationId: deleteDiscount
+      summary: Delete Discount
+  /api/v1/discount/shop/discountcode:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: status
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-clien-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              is_active:
+                example: true
+                type: boolean
+              limit:
+                example: '50'
+                type: string
+              page:
+                example: '1'
+                type: string
+              shopId:
+                example: 65a744954e7912c23e30da8d
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Get Expire Code By Shop
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  count:
+                    example: 1
+                    type: number
+                  unActiveDiscount:
+                    example:
+                      - _id: 65b2c19709968b72d999ad1f
+                        createdAt: '2024-01-25T20:16:23.288Z'
+                        discount_applies_to: specific
+                        discount_code: SHOPEENHTGH1
+                        discount_end_date: '2024-02-26T02:00:00.000Z'
+                        discount_is_active: false
+                        discount_max_per_user: 1
+                        discount_max_uses: 120
+                        discount_max_value: 30000
+                        discount_min_order_value: 200000
+                        discount_name: Fixed amount
+                        discount_producut_ids:
+                          - 65af57fb9a29ed31f30a77fa
+                        discount_start_date: '2024-01-26T02:00:00.000Z'
+                        discount_type: percentage
+                        discount_used_count: 0
+                        discount_users_used: []
+                        discount_value: 30000
+                        distount_description: description
+                        updatedAt: '2024-01-25T20:16:23.288Z'
+                    items:
+                      properties:
+                        _id:
+                          example: 65b2c19709968b72d999ad1f
+                          type: string
+                        createdAt:
+                          example: '2024-01-25T20:16:23.288Z'
+                          type: string
+                        discount_applies_to:
+                          example: specific
+                          type: string
+                        discount_code:
+                          example: SHOPEENHTGH1
+                          type: string
+                        discount_end_date:
+                          example: '2024-02-26T02:00:00.000Z'
+                          type: string
+                        discount_is_active:
+                          example: false
+                          type: boolean
+                        discount_max_per_user:
+                          example: 1
+                          type: number
+                        discount_max_uses:
+                          example: 120
+                          type: number
+                        discount_max_value:
+                          example: 30000
+                          type: number
+                        discount_min_order_value:
+                          example: 200000
+                          type: number
+                        discount_name:
+                          example: Fixed amount
+                          type: string
+                        discount_producut_ids:
+                          example:
+                            - 65af57fb9a29ed31f30a77fa
+                          items:
+                            example: 65af57fb9a29ed31f30a77fa
+                            type: string
+                          type: array
+                        discount_start_date:
+                          example: '2024-01-26T02:00:00.000Z'
+                          type: string
+                        discount_type:
+                          example: percentage
+                          type: string
+                        discount_used_count:
+                          example: 0
+                          type: number
+                        discount_users_used:
+                          example: []
+                          items: {}
+                          type: array
+                        discount_value:
+                          example: 30000
+                          type: number
+                        distount_description:
+                          example: description
+                          type: string
+                        updatedAt:
+                          example: '2024-01-25T20:16:23.288Z'
+                          type: string
+                      type: object
+                    type: array
+                type: object
+              message:
+                example: OK
+                type: string
+              statusCode:
+                example: 200
+                type: number
+            type: object
+      tags:
+        - Discount
+        - Shop
+      description: Get Code By Shop
+      operationId: getCodeByShop
+      summary: Get Code By Shop
+  /api/v1/discount/shop/get-amount-discount:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: status
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-clien-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              code:
+                example: SHOPEENHTGH5
+                type: string
+              products:
+                example:
+                  - productId: 65af57fb9a29ed31f30a77fa
+                    quantity: 2
+                  - productId: 65ae050ee0b3464845b0f39d
+                    quantity: 3
+                items:
+                  properties:
+                    productId:
+                      example: 65af57fb9a29ed31f30a77fa
+                      type: string
+                    quantity:
+                      example: 2
+                      type: number
+                  type: object
+                type: array
+              shopId:
+                example: 65a744954e7912c23e30da8d
+                type: string
+              userId:
+                example: 65a2de581f5053c881e43340
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Get Amount Discount
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Expose-Headers:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  apply:
+                    example: false
+                    type: boolean
+                  discount:
+                    example: 30000
+                    type: number
+                  discountMax:
+                    example: 30000
+                    type: number
+                  totalOrder:
+                    example: 293600
+                    type: number
+                  totalPrice:
+                    example: 263600
+                    type: number
+                  type:
+                    example: percent
+                    type: string
+                  value:
+                    example: 20%
+                    type: string
+                type: object
+              message:
+                example: OK
+                type: string
+              statusCode:
+                example: 200
+                type: number
+            type: object
+        '500':
+          description: Maximum number of uses
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              code:
+                example: 500
+                type: number
+              message:
+                example: You have reached the maximum number of uses for this discount code
+                type: string
+              status:
+                example: error
+                type: string
+            type: object
+      tags:
+        - Discount
+        - Shop
+      description: Get Amount Discount
+      operationId: getAmountDiscount
+      summary: Get Amount Discount
+  /api/v1/notification:
+    get:
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Notification
+      description: Get list Noti By User
+      operationId: getListNotiByUser
+      summary: Get list Noti By User
+  /api/v1/order:
+    get:
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Order
+      description: Get order by id (User)
+      operationId: getOrderByIdUser
+      summary: Get order by id (User)
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              cartId:
+                example: 660be79ee1a9d53829f0703b
+                type: string
+              cart_products_new:
+                example:
+                  - item_product:
+                      - productId: 65b7f50b2f6be2474d028d10
+                        product_name: '[Sale Tết] iPhone 15 - Hàng Chính Hãng VN/A'
+                        product_price: 21300000
+                        quantity: 1
+                      - productId: 65b7e9a02f6be2474d028c3e
+                        product_name: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                        product_price: 145000
+                        quantity: 2
+                      - productId: 65acd807011cc3f44404a45e
+                        product_name: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                        product_price: 122222
+                        quantity: 2
+                    shopId: 65b4a038e9d92934ead5b3c5
+                    shop_discount:
+                      - SHOPEENHTG14
+                  - item_product:
+                      - productId: 65acd807011cc3f44404a45e
+                        product_name: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                        product_price: 122222
+                        quantity: 4
+                    shopId: 65a744954e7912c23e30da8d
+                    shop_discount: []
+                items:
+                  properties:
+                    item_product:
+                      example:
+                        - productId: 65b7f50b2f6be2474d028d10
+                          product_name: '[Sale Tết] iPhone 15 - Hàng Chính Hãng VN/A'
+                          product_price: 21300000
+                          quantity: 1
+                        - productId: 65b7e9a02f6be2474d028c3e
+                          product_name: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                          product_price: 145000
+                          quantity: 2
+                        - productId: 65acd807011cc3f44404a45e
+                          product_name: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                          product_price: 122222
+                          quantity: 2
+                      items:
+                        properties:
+                          productId:
+                            example: 65b7f50b2f6be2474d028d10
+                            type: string
+                          product_name:
+                            example: '[Sale Tết] iPhone 15 - Hàng Chính Hãng VN/A'
+                            type: string
+                          product_price:
+                            example: 21300000
+                            type: number
+                          quantity:
+                            example: 1
+                            type: number
+                        type: object
+                      type: array
+                    shopId:
+                      example: 65b4a038e9d92934ead5b3c5
+                      type: string
+                    shop_discount:
+                      example:
+                        - SHOPEENHTG14
+                      items:
+                        example: SHOPEENHTG14
+                        type: string
+                      type: array
+                  type: object
+                type: array
+              user_address:
+                properties:
+                  District:
+                    example: Bình Tan
+                    type: string
+                  province:
+                    example: TP.HCM
+                    type: string
+                  street:
+                    example: Nguyen Quy Yem
+                    type: string
+                  ward:
+                    example: An Lac
+                    type: string
+                type: object
+              user_payment:
+                properties:
+                  method:
+                    example: momo
+                    type: string
+                type: object
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Order
+      description: Create New Order
+      operationId: createNewOrder
+      summary: Create New Order
+  /api/v1/product:
+    get:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Product
+      description: Get All Product
+      operationId: getAllProduct
+      summary: Get All Product
+  /api/v1/product/changestatus:
+    put:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              product_id:
+                example: 65acd807011cc3f44404a45e
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Publish Product
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  __v:
+                    example: 0
+                    type: number
+                  _id:
+                    example: 65acd807011cc3f44404a45e
+                    type: string
+                  createdAt:
+                    example: '2024-01-21T08:38:31.610Z'
+                    type: string
+                  isDraft:
+                    example: false
+                    type: boolean
+                  isPublished:
+                    example: true
+                    type: boolean
+                  product_attributes:
+                    properties:
+                      branch:
+                        example: No branch
+                        type: string
+                      metarial:
+                        example: Thun
+                        type: string
+                      size:
+                        example:
+                          - XS
+                          - S
+                          - L
+                          - XL
+                        items:
+                          example: XS
+                          type: string
+                        type: array
+                    type: object
+                  product_description:
+                    example: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329 với chất liệu thun cotton mềm mịn tạo cảm giác thoải mái, dễ dàng phối được với nhiều phong cách khác nhau. Hình in độc đáo, lạ mắt.
+                    type: string
+                  product_name:
+                    example: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                    type: string
+                  product_price:
+                    example: 239
+                    type: number
+                  product_quantity:
+                    example: 123
+                    type: number
+                  product_ratingsAverage:
+                    example: 4.3
+                    type: number
+                  product_shop:
+                    example: 65a744954e7912c23e30da8d
+                    type: string
+                  product_slug:
+                    example: ao-thun-nam-nu-couple-tx-relax-fit-typo-graphic-effort-do-ts-329
+                    type: string
+                  product_thumb:
+                    example: https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lq8fvi9eam6q44_tn
+                    type: string
+                  product_type:
+                    example: Clothing
+                    type: string
+                  product_variations:
+                    example: []
+                    items: {}
+                    type: array
+                  updatedAt:
+                    example: '2024-01-21T10:20:58.386Z'
+                    type: string
+                type: object
+              message:
+                example: Publish product successfully
+                type: string
+              statusCode:
+                example: 200
+                type: number
+            type: object
+      tags:
+        - Product
+      description: Change Status Product
+      operationId: changeStatusProduct
+      summary: Change Status Product
+  /api/v1/product/create:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              product_attributes:
+                properties:
+                  color:
+                    example:
+                      - Đen
+                      - Đỏ
+                      - Bạc
+                      - Hồng
+                      - Trắng
+                      - Vàng
+                    items:
+                      example: Đen
+                      type: string
+                    type: array
+                  manufacturer:
+                    example: PIXAR
+                    type: string
+                  model:
+                    example: []
+                    items: {}
+                    type: array
+                type: object
+              product_description:
+                example: |-
+                  Đèn kẹp bàn sử dụng cho việc học tập, làm việc, trang trí nội thất
+
+                  Thông số ký thuật Đèn học kiểu dáng PIXAR :
+                  – Chiều dài: 95cm
+                  + Chụp đèn: Đường kính 16cm
+                  + Thân đèn: 37cm + 38cm
+                  – Màu sắc: Đen, trắng, đỏ, vàng.
+                  – Điện áp: 220V~50Hz.
+                  – Đuôi đèn: Sử dụng đuôi E27 phổ biến trên thị trường.
+                  – Chất liệu: Thép ống cứng được sơn tĩnh điện.
+
+                  Ưu điểm Đèn học kiểu dáng PIXAR :
+                  - Sử dụng phổ biến phòng đọc, phòng làm việc giúp không gian sinh hoạt trở nên hiện đại hơn, tiện nghi hơn, với thiết kế đẹp mắt.
+                  - Đặc biệt được sử dụng nhiều trong các công việc chuyên chế tác đồ tinh xảo vàng bạc đá quý, dùng làm đèn xăm hình nghệ thuật, spa, chăm sóc da, chăm sóc tóc, nha khoa …
+
+                  LH
+                  Đèn Phước Sang
+                  0976202713
+                  #denhoc #denkepban #dendocsach #denlamviec #dengame #den #kythuat #decor #goclamviec #hoctap #pix
+                type: string
+              product_name:
+                example: 1321 Đèn kẹp bàn sử dụng cho việc học tập
+                type: string
+              product_price:
+                example: 145000
+                type: number
+              product_quantity:
+                example: 431
+                type: number
+              product_thumb:
+                example: https://down-vn.img.susercontent.com/file/d7101274bf38c940cbe20c9b399eb412_tn
+                type: string
+              product_type:
+                example: Clothing
+                type: string
+              product_variations:
+                example:
+                  - Không đèn
+                  - Rạng Đông 5W Vàng
+                  - Rạng Đông 5W Trắng
+                  - Rạng Đông 7W Vàng
+                  - Rạng Đông 7W Trắng
+                  - Rạng Đông 9W Vàng
+                  - Rạng Đông 9W Trắng
+                  - Bóng LED 3 màu
+                items:
+                  example: Không đèn
+                  type: string
+                type: array
+            type: object
+      responses:
+        '201':
+          description: Create Product
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  __v:
+                    example: 0
+                    type: number
+                  _id:
+                    example: 65ab6da29ae51ebf75ee2c84
+                    type: string
+                  createdAt:
+                    example: '2024-01-20T06:52:18.072Z'
+                    type: string
+                  product_attributes:
+                    properties:
+                      branch:
+                        example: No branch
+                        type: string
+                      metarial:
+                        example: Thun
+                        type: string
+                      size:
+                        example:
+                          - XS
+                          - S
+                          - L
+                          - XL
+                        items:
+                          example: XS
+                          type: string
+                        type: array
+                    type: object
+                  product_description:
+                    example: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329 với chất liệu thun cotton mềm mịn tạo cảm giác thoải mái, dễ dàng phối được với nhiều phong cách khác nhau. Hình in độc đáo, lạ mắt.
+                    type: string
+                  product_name:
+                    example: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                    type: string
+                  product_price:
+                    example: 239
+                    type: number
+                  product_quantity:
+                    example: 123
+                    type: number
+                  product_shop:
+                    example: 65a744954e7912c23e30da8d
+                    type: string
+                  product_thumb:
+                    example: https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lq8fvi9eam6q44_tn
+                    type: string
+                  product_type:
+                    example: Clothing
+                    type: string
+                  updatedAt:
+                    example: '2024-01-20T06:52:18.072Z'
+                    type: string
+                type: object
+              message:
+                example: Created
+                type: string
+              options:
+                properties: {}
+                type: object
+              statusCode:
+                example: 201
+                type: number
+            type: object
+      tags:
+        - Product
+      description: Create Product
+      operationId: createProduct
+      summary: Create Product
+  /api/v1/product/den-hoc-kep-ban-doc-sach-lam-viec-pixar-bong-led-chong-can-thong-minh-doi-mau-3-che-do-anh-sang:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+      responses:
+        '200':
+          description: Get Product By ISlug
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Encoding:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Transfer-Encoding:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                example:
+                  - __v: 0
+                    _id: 65ae050ee0b3464845b0f39d
+                    createdAt: '2024-01-22T06:02:54.270Z'
+                    isDraft: true
+                    isPublished: false
+                    product_attributes:
+                      color:
+                        - Đen
+                        - Đỏ
+                        - Bạc
+                        - Hồng
+                        - Trắng
+                        - Vàng
+                      manufacturer: PIXAR
+                      model: []
+                    product_description: |-
+                      Đèn kẹp bàn sử dụng cho việc học tập, làm việc, trang trí nội thất
+
+                      Thông số ký thuật Đèn học kiểu dáng PIXAR :
+                      – Chiều dài: 95cm
+                      + Chụp đèn: Đường kính 16cm
+                      + Thân đèn: 37cm + 38cm
+                      – Màu sắc: Đen, trắng, đỏ, vàng.
+                      – Điện áp: 220V~50Hz.
+                      – Đuôi đèn: Sử dụng đuôi E27 phổ biến trên thị trường.
+                      – Chất liệu: Thép ống cứng được sơn tĩnh điện.
+
+                      Ưu điểm Đèn học kiểu dáng PIXAR :
+                      - Sử dụng phổ biến phòng đọc, phòng làm việc giúp không gian sinh hoạt trở nên hiện đại hơn, tiện nghi hơn, với thiết kế đẹp mắt.
+                      - Đặc biệt được sử dụng nhiều trong các công việc chuyên chế tác đồ tinh xảo vàng bạc đá quý, dùng làm đèn xăm hình nghệ thuật, spa, chăm sóc da, chăm sóc tóc, nha khoa …
+
+                      LH
+                      Đèn Phước Sang
+                      0976202713
+                      #denhoc #denkepban #dendocsach #denlamviec #dengame #den #kythuat #decor #goclamviec #hoctap #pix
+                    product_name: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                    product_price: 145000
+                    product_quantity: 431
+                    product_ratingsAverage: 4.3
+                    product_slug: den-hoc-kep-ban-doc-sach-lam-viec-pixar-bong-led-chong-can-thong-minh-doi-mau-3-che-do-anh-sang-680aecd0
+                    product_thumb: https://down-vn.img.susercontent.com/file/d7101274bf38c940cbe20c9b399eb412_tn
+                    product_type: Electronics
+                    product_variations:
+                      - Không đèn
+                      - Rạng Đông 5W Vàng
+                      - Rạng Đông 5W Trắng
+                      - Rạng Đông 7W Vàng
+                      - Rạng Đông 7W Trắng
+                      - Rạng Đông 9W Vàng
+                      - Rạng Đông 9W Trắng
+                      - Bóng LED 3 màu
+                    updatedAt: '2024-01-22T06:02:54.270Z'
+                items:
+                  properties:
+                    __v:
+                      example: 0
+                      type: number
+                    _id:
+                      example: 65ae050ee0b3464845b0f39d
+                      type: string
+                    createdAt:
+                      example: '2024-01-22T06:02:54.270Z'
+                      type: string
+                    isDraft:
+                      example: true
+                      type: boolean
+                    isPublished:
+                      example: false
+                      type: boolean
+                    product_attributes:
+                      properties:
+                        color:
+                          example:
+                            - Đen
+                            - Đỏ
+                            - Bạc
+                            - Hồng
+                            - Trắng
+                            - Vàng
+                          items:
+                            example: Đen
+                            type: string
+                          type: array
+                        manufacturer:
+                          example: PIXAR
+                          type: string
+                        model:
+                          example: []
+                          items: {}
+                          type: array
+                      type: object
+                    product_description:
+                      example: |-
+                        Đèn kẹp bàn sử dụng cho việc học tập, làm việc, trang trí nội thất
+
+                        Thông số ký thuật Đèn học kiểu dáng PIXAR :
+                        – Chiều dài: 95cm
+                        + Chụp đèn: Đường kính 16cm
+                        + Thân đèn: 37cm + 38cm
+                        – Màu sắc: Đen, trắng, đỏ, vàng.
+                        – Điện áp: 220V~50Hz.
+                        – Đuôi đèn: Sử dụng đuôi E27 phổ biến trên thị trường.
+                        – Chất liệu: Thép ống cứng được sơn tĩnh điện.
+
+                        Ưu điểm Đèn học kiểu dáng PIXAR :
+                        - Sử dụng phổ biến phòng đọc, phòng làm việc giúp không gian sinh hoạt trở nên hiện đại hơn, tiện nghi hơn, với thiết kế đẹp mắt.
+                        - Đặc biệt được sử dụng nhiều trong các công việc chuyên chế tác đồ tinh xảo vàng bạc đá quý, dùng làm đèn xăm hình nghệ thuật, spa, chăm sóc da, chăm sóc tóc, nha khoa …
+
+                        LH
+                        Đèn Phước Sang
+                        0976202713
+                        #denhoc #denkepban #dendocsach #denlamviec #dengame #den #kythuat #decor #goclamviec #hoctap #pix
+                      type: string
+                    product_name:
+                      example: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                      type: string
+                    product_price:
+                      example: 145000
+                      type: number
+                    product_quantity:
+                      example: 431
+                      type: number
+                    product_ratingsAverage:
+                      example: 4.3
+                      type: number
+                    product_slug:
+                      example: den-hoc-kep-ban-doc-sach-lam-viec-pixar-bong-led-chong-can-thong-minh-doi-mau-3-che-do-anh-sang-680aecd0
+                      type: string
+                    product_thumb:
+                      example: https://down-vn.img.susercontent.com/file/d7101274bf38c940cbe20c9b399eb412_tn
+                      type: string
+                    product_type:
+                      example: Electronics
+                      type: string
+                    product_variations:
+                      example:
+                        - Không đèn
+                        - Rạng Đông 5W Vàng
+                        - Rạng Đông 5W Trắng
+                        - Rạng Đông 7W Vàng
+                        - Rạng Đông 7W Trắng
+                        - Rạng Đông 9W Vàng
+                        - Rạng Đông 9W Trắng
+                        - Bóng LED 3 màu
+                      items:
+                        example: Không đèn
+                        type: string
+                      type: array
+                    updatedAt:
+                      example: '2024-01-22T06:02:54.270Z'
+                      type: string
+                  type: object
+                type: array
+              message:
+                example: OK
+                type: string
+              statusCode:
+                example: 200
+                type: number
+            type: object
+      tags:
+        - Product
+      description: Get Product By Slug
+      operationId: getProductBySlug
+      summary: Get Product By Slug
+  /api/v1/product/draft/all:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+      responses:
+        '200':
+          description: Get All Product Draft
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Encoding:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Transfer-Encoding:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                example:
+                  - __v: 0
+                    _id: 65acd7c4011cc3f44404a454
+                    createdAt: '2024-01-21T08:37:25.077Z'
+                    isDraft: true
+                    isPublished: false
+                    product_attributes:
+                      color:
+                        - Đen
+                        - Đỏ
+                        - Bạc
+                        - Hồng
+                        - Trắng
+                        - Vàng
+                      manufacturer: PIXAR
+                      model: []
+                    product_description: |-
+                      Đèn kẹp bàn sử dụng cho việc học tập, làm việc, trang trí nội thất
+
+                      Thông số ký thuật Đèn học kiểu dáng PIXAR :
+                      – Chiều dài: 95cm
+                      + Chụp đèn: Đường kính 16cm
+                      + Thân đèn: 37cm + 38cm
+                      – Màu sắc: Đen, trắng, đỏ, vàng.
+                      – Điện áp: 220V~50Hz.
+                      – Đuôi đèn: Sử dụng đuôi E27 phổ biến trên thị trường.
+                      – Chất liệu: Thép ống cứng được sơn tĩnh điện.
+
+                      Ưu điểm Đèn học kiểu dáng PIXAR :
+                      - Sử dụng phổ biến phòng đọc, phòng làm việc giúp không gian sinh hoạt trở nên hiện đại hơn, tiện nghi hơn, với thiết kế đẹp mắt.
+                      - Đặc biệt được sử dụng nhiều trong các công việc chuyên chế tác đồ tinh xảo vàng bạc đá quý, dùng làm đèn xăm hình nghệ thuật, spa, chăm sóc da, chăm sóc tóc, nha khoa …
+
+                      LH
+                      Đèn Phước Sang
+                      0976202713
+                      #denhoc #denkepban #dendocsach #denlamviec #dengame #den #kythuat #decor #goclamviec #hoctap #pix
+                    product_name: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                    product_price: 145000
+                    product_quantity: 431
+                    product_ratingsAverage: 4.3
+                    product_shop:
+                      email: admin@gmail.com
+                      name: thanh trường
+                    product_slug: den-hoc-kep-ban-doc-sach-lam-viec-pixar-bong-led-chong-can-thong-minh-doi-mau-3-che-do-anh-sang
+                    product_thumb: https://down-vn.img.susercontent.com/file/d7101274bf38c940cbe20c9b399eb412_tn
+                    product_type: Electronics
+                    product_variations:
+                      - Không đèn
+                      - Rạng Đông 5W Vàng
+                      - Rạng Đông 5W Trắng
+                      - Rạng Đông 7W Vàng
+                      - Rạng Đông 7W Trắng
+                      - Rạng Đông 9W Vàng
+                      - Rạng Đông 9W Trắng
+                      - Bóng LED 3 màu
+                    updatedAt: '2024-01-22T03:28:20.744Z'
+                  - __v: 0
+                    _id: 65acd80a011cc3f44404a464
+                    createdAt: '2024-01-21T08:38:34.242Z'
+                    isDraft: true
+                    isPublished: false
+                    product_attributes:
+                      branch: No branch
+                      metarial: Thun
+                      size:
+                        - XS
+                        - S
+                        - L
+                        - XL
+                    product_description: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329 với chất liệu thun cotton mềm mịn tạo cảm giác thoải mái, dễ dàng phối được với nhiều phong cách khác nhau. Hình in độc đáo, lạ mắt.
+                    product_name: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                    product_price: 239
+                    product_quantity: 123
+                    product_ratingsAverage: 4.3
+                    product_shop:
+                      email: admin@gmail.com
+                      name: thanh trường
+                    product_slug: ao-thun-nam-nu-couple-tx-relax-fit-typo-graphic-effort-do-ts-329
+                    product_thumb: https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lq8fvi9eam6q44_tn
+                    product_type: Clothing
+                    product_variations: []
+                    updatedAt: '2024-01-21T08:38:34.242Z'
+                items:
+                  properties:
+                    __v:
+                      example: 0
+                      type: number
+                    _id:
+                      example: 65acd7c4011cc3f44404a454
+                      type: string
+                    createdAt:
+                      example: '2024-01-21T08:37:25.077Z'
+                      type: string
+                    isDraft:
+                      example: true
+                      type: boolean
+                    isPublished:
+                      example: false
+                      type: boolean
+                    product_attributes:
+                      properties:
+                        branch:
+                          example: No branch
+                          type: string
+                        color:
+                          example:
+                            - Đen
+                            - Đỏ
+                            - Bạc
+                            - Hồng
+                            - Trắng
+                            - Vàng
+                          items:
+                            example: Đen
+                            type: string
+                          type: array
+                        manufacturer:
+                          example: PIXAR
+                          type: string
+                        metarial:
+                          example: Thun
+                          type: string
+                        model:
+                          example: []
+                          items: {}
+                          type: array
+                        size:
+                          example:
+                            - XS
+                            - S
+                            - L
+                            - XL
+                          items:
+                            example: XS
+                            type: string
+                          type: array
+                      type: object
+                    product_description:
+                      example: |-
+                        Đèn kẹp bàn sử dụng cho việc học tập, làm việc, trang trí nội thất
+
+                        Thông số ký thuật Đèn học kiểu dáng PIXAR :
+                        – Chiều dài: 95cm
+                        + Chụp đèn: Đường kính 16cm
+                        + Thân đèn: 37cm + 38cm
+                        – Màu sắc: Đen, trắng, đỏ, vàng.
+                        – Điện áp: 220V~50Hz.
+                        – Đuôi đèn: Sử dụng đuôi E27 phổ biến trên thị trường.
+                        – Chất liệu: Thép ống cứng được sơn tĩnh điện.
+
+                        Ưu điểm Đèn học kiểu dáng PIXAR :
+                        - Sử dụng phổ biến phòng đọc, phòng làm việc giúp không gian sinh hoạt trở nên hiện đại hơn, tiện nghi hơn, với thiết kế đẹp mắt.
+                        - Đặc biệt được sử dụng nhiều trong các công việc chuyên chế tác đồ tinh xảo vàng bạc đá quý, dùng làm đèn xăm hình nghệ thuật, spa, chăm sóc da, chăm sóc tóc, nha khoa …
+
+                        LH
+                        Đèn Phước Sang
+                        0976202713
+                        #denhoc #denkepban #dendocsach #denlamviec #dengame #den #kythuat #decor #goclamviec #hoctap #pix
+                      type: string
+                    product_name:
+                      example: Đèn học kẹp bàn, đọc sách, làm việc PIXAR - Bóng LED chống cận thông minh đổi màu 3 chế độ ánh sáng
+                      type: string
+                    product_price:
+                      example: 145000
+                      type: number
+                    product_quantity:
+                      example: 431
+                      type: number
+                    product_ratingsAverage:
+                      example: 4.3
+                      type: number
+                    product_shop:
+                      properties:
+                        email:
+                          example: admin@gmail.com
+                          type: string
+                        name:
+                          example: thanh trường
+                          type: string
+                      type: object
+                    product_slug:
+                      example: den-hoc-kep-ban-doc-sach-lam-viec-pixar-bong-led-chong-can-thong-minh-doi-mau-3-che-do-anh-sang
+                      type: string
+                    product_thumb:
+                      example: https://down-vn.img.susercontent.com/file/d7101274bf38c940cbe20c9b399eb412_tn
+                      type: string
+                    product_type:
+                      example: Electronics
+                      type: string
+                    product_variations:
+                      example:
+                        - Không đèn
+                        - Rạng Đông 5W Vàng
+                        - Rạng Đông 5W Trắng
+                        - Rạng Đông 7W Vàng
+                        - Rạng Đông 7W Trắng
+                        - Rạng Đông 9W Vàng
+                        - Rạng Đông 9W Trắng
+                        - Bóng LED 3 màu
+                      items:
+                        example: Không đèn
+                        type: string
+                      type: array
+                    updatedAt:
+                      example: '2024-01-22T03:28:20.744Z'
+                      type: string
+                  type: object
+                type: array
+              message:
+                example: OK
+                type: string
+              statusCode:
+                example: 200
+                type: number
+            type: object
+      tags:
+        - Product
+      description: Get All Product By Status
+      operationId: getAllProductByStatus
+      summary: Get All Product By Status
+  /api/v1/product/id/65acd807011cc3f44404a45e:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+      responses:
+        '200':
+          description: Get Product By Id
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                example:
+                  - __v: 0
+                    _id: 65acd807011cc3f44404a45e
+                    createdAt: '2024-01-21T08:38:31.610Z'
+                    isDraft: true
+                    isPublished: false
+                    product_attributes:
+                      branch: No branch
+                      metarial: Thun
+                      size:
+                        - XS
+                        - S
+                        - L
+                        - XL
+                    product_description: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329 với chất liệu thun cotton mềm mịn tạo cảm giác thoải mái, dễ dàng phối được với nhiều phong cách khác nhau. Hình in độc đáo, lạ mắt.
+                    product_name: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                    product_price: 239000
+                    product_quantity: 123
+                    product_ratingsAverage: 4.3
+                    product_slug: ao-thun-nam-nu-couple-tx-relax-fit-typo-graphic-effort-do-ts-329
+                    product_thumb: https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lq8fvi9eam6q44_tn
+                    product_type: Clothing
+                    product_variations: []
+                    updatedAt: '2024-01-22T05:36:51.350Z'
+                items:
+                  properties:
+                    __v:
+                      example: 0
+                      type: number
+                    _id:
+                      example: 65acd807011cc3f44404a45e
+                      type: string
+                    createdAt:
+                      example: '2024-01-21T08:38:31.610Z'
+                      type: string
+                    isDraft:
+                      example: true
+                      type: boolean
+                    isPublished:
+                      example: false
+                      type: boolean
+                    product_attributes:
+                      properties:
+                        branch:
+                          example: No branch
+                          type: string
+                        metarial:
+                          example: Thun
+                          type: string
+                        size:
+                          example:
+                            - XS
+                            - S
+                            - L
+                            - XL
+                          items:
+                            example: XS
+                            type: string
+                          type: array
+                      type: object
+                    product_description:
+                      example: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329 với chất liệu thun cotton mềm mịn tạo cảm giác thoải mái, dễ dàng phối được với nhiều phong cách khác nhau. Hình in độc đáo, lạ mắt.
+                      type: string
+                    product_name:
+                      example: Áo Thun Nam Nữ Couple TX Relax Fit Typo Graphic Effort Do TS 329
+                      type: string
+                    product_price:
+                      example: 239000
+                      type: number
+                    product_quantity:
+                      example: 123
+                      type: number
+                    product_ratingsAverage:
+                      example: 4.3
+                      type: number
+                    product_slug:
+                      example: ao-thun-nam-nu-couple-tx-relax-fit-typo-graphic-effort-do-ts-329
+                      type: string
+                    product_thumb:
+                      example: https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lq8fvi9eam6q44_tn
+                      type: string
+                    product_type:
+                      example: Clothing
+                      type: string
+                    product_variations:
+                      example: []
+                      items: {}
+                      type: array
+                    updatedAt:
+                      example: '2024-01-22T05:36:51.350Z'
+                      type: string
+                  type: object
+                type: array
+              message:
+                example: OK
+                type: string
+              statusCode:
+                example: 200
+                type: number
+            type: object
+      tags:
+        - Product
+      description: Get Product By Id
+      operationId: getProductById
+      summary: Get Product By Id
+  /api/v1/product/search:
+    get:
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Product
+      description: Search Product By Key
+      operationId: searchProductByKey
+      summary: Search Product By Key
+  /api/v1/product/update/65af57fb9a29ed31f30a77fa:
+    patch:
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              product_name:
+                example: ABC
+                type: string
+              product_quantity:
+                example: 1131
+                type: number
+              product_type:
+                example: Electronics
+                type: string
+            type: object
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Product
+      description: Update Product By Shop
+      operationId: updateProductByShop
+      summary: Update Product By Shop
+  /api/v1/shop/all:
+    delete:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: query
+          name: id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - in: formData
+          name: id
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Shop1
+      description: Delete Shop
+      operationId: deleteShop
+      summary: Delete Shop
+    get:
+      parameters:
+        - in: query
+          name: _end
+          type: string
+        - in: query
+          name: _order
+          type: string
+        - in: query
+          name: _sort
+          type: string
+        - in: query
+          name: _start
+          type: string
+        - in: query
+          name: q
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Shop1
+      description: Get Shop
+      operationId: getShop
+      summary: Get Shop
+  /api/v1/shop/refreshtoken:
+    post:
+      consumes:
+        - text/plain
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-rtoken-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            format: binary
+            type: string
+      responses:
+        '202':
+          description: Refresh Token
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Encoding:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Transfer-Encoding:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  code:
+                    example: '2001'
+                    type: string
+                  data:
+                    properties:
+                      tokens:
+                        properties:
+                          accessToken:
+                            example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE3NDQ5NTRlNzkxMmMyM2UzMGRhOGQiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcwNTczMzQ0NiwiZXhwIjoxNzA1OTA2MjQ2fQ.kt913eUcMDh29hDyNurcorXDoGsiZVlGNb_HIGV7kjfXjsehwIBGrpD8IAaaHI-upY0ScxAl2bETIjQUwiZgkpIdzwP-MGIca-wz1ZLB6HJkDo6sqMD_bM2SUHgA7ZwMToIb37JkbDqTatdqR0o6oVEXE4kq42Yh1QxS3ASNdwtscQXMkHzr3fGNvJqJRL3D36CaRj51yrDUf6JBA9RJ1jEhx3nxQb4eaHolajeTXQ4wsVXPpja4rCG4GimSXMbTjdLHrfGsB0JxY9E7ID_pZwwb_NhAzciqMistTXA3OPDnwYGxLsY657nm6Sm39wqDYtoWmnWZm6WZaTpIbnnd7w
+                            type: string
+                          refreshToken:
+                            example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE3NDQ5NTRlNzkxMmMyM2UzMGRhOGQiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcwNTczMzQ0NiwiZXhwIjoxNzA2MzM4MjQ2fQ.p83iLRWa1rnzsFmCOo-UOZLj0EDdcDCCDpwhaxLfdGlSPix-qI8XSSzRLkiIsc2RBz8f0MkHTJrvQ8p0YbDyYhkTJW2s5mmsXCk5W00MJFDEVwp4IwYnfDqX8bAM5a8rGDnaOGiWRYkZyxPlsgroc2OUDx2u1lRE2_5SDdXfFHHaKB3duo-JYubk_ghvzdtpDUmOSKfbES2HXecNxvvdTOVAa4tkkxw-9sfuUqnFwaUe-aW0roDWU0sjkJ1cuwWyXPkKMjFcPNfz4iJMQyJsgGEO8gnvkq2P44sbi-KD5wN5_F5vThhjN1-co-rTBy0lI423XOFKMBH6NZPHI6Gd6w
+                            type: string
+                        type: object
+                      user:
+                        properties:
+                          email:
+                            example: admin@gmail.com
+                            type: string
+                          exp:
+                            example: 1706338234
+                            type: number
+                          iat:
+                            example: 1705733434
+                            type: number
+                          userId:
+                            example: 65a744954e7912c23e30da8d
+                            type: string
+                        type: object
+                    type: object
+                  status:
+                    example: success
+                    type: string
+                type: object
+              message:
+                example: Accepted
+                type: string
+              statusCode:
+                example: 202
+                type: number
+            type: object
+      tags:
+        - Auth
+      description: Refresh Token
+      operationId: refreshToken
+      summary: Refresh Token
+  /api/v1/shop/signin:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              email:
+                example: admin2@gmail.com
+                type: string
+              password:
+                example: truong911@
+                type: string
+            type: object
+      responses:
+        '202':
+          description: Sign In
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Encoding:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Transfer-Encoding:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  code:
+                    example: '2001'
+                    type: string
+                  data:
+                    properties:
+                      shop:
+                        properties:
+                          _id:
+                            example: 65a744954e7912c23e30da8d
+                            type: string
+                          email:
+                            example: admin@gmail.com
+                            type: string
+                          name:
+                            example: thanh trường
+                            type: string
+                        type: object
+                      tokens:
+                        properties:
+                          accessToken:
+                            example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE3NDQ5NTRlNzkxMmMyM2UzMGRhOGQiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcwNTYwNDAzOSwiZXhwIjoxNzA1Nzc2ODM5fQ.P0OxE_CuyGTTnAIhj1fCs4IE0MNwdYtwLL0egPLkYsMnHApZj3pD2P9kgdbtAJ4YPPIDv1WIMD9YhGn1IC0PXp2smshA7hgfbj1tJOiWJ74s8ZL2tYZz6cddleABSRUvtQLsNkiPNjBPvPL1PV9Wvf1kAK4HkPrvaYPMVPFvWhC-bOHDEuFW4NFOuGC6DPxQfbr7HRgSCdea6Opb1vO2lY37Gvsnfbnz5guUgdhYwHjTix_ONBhxZ9inQJMCkpYDhjVNxzztmXETtUADUYTA-s-_BS6YhodUaSjH7eePZapSJ2EMilglBP82aP4rvjtmaVFtU5s3F-PHhw7cii9gdg
+                            type: string
+                          refreshToken:
+                            example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE3NDQ5NTRlNzkxMmMyM2UzMGRhOGQiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcwNTYwNDAzOSwiZXhwIjoxNzA2MjA4ODM5fQ.MzPPFnlBIldhBwfCdKI2fX3QW6J3lw75XV6Ye8FRAj1lwOEjKfAhi5fy5LF4SHu3qgkugz2scl3dMK0acZQz3gO17QkIcGuPzfCrpLP3xGtVGWEbWvwsBogCSgR50QBDXcnvpRNcVTO6TDbNjOnhHZBf7F72Lz2M2lP1vN1LBOTle7RRQ4_M4UuW17kd9n9f-JISVY7XWrgUIofpQMKm1l3KDENn4bymr9depUCAgLFWoPNxFnTRvQq0zGcXxcDBiAbGG6ZM-YyOHubq67_SFMLln2LzjKXl9T-I9NP3Xo5AvvDiP6DDyPv9pFjfqCUjj9gM7Cx-DN-eu6KcyAJLQQ
+                            type: string
+                        type: object
+                    type: object
+                  message:
+                    example: Sign in successfully
+                    type: string
+                  status:
+                    example: success
+                    type: string
+                type: object
+              message:
+                example: Accepted
+                type: string
+              statusCode:
+                example: 202
+                type: number
+            type: object
+      tags:
+        - Auth
+      description: Sign In
+      operationId: signIn
+      summary: Sign In
+  /api/v1/shop/signout:
+    post:
+      consumes:
+        - text/plain
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-client-id
+          type: string
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-rtoken-id
+          type: string
+        - in: body
+          name: body
+          schema:
+            format: binary
+            type: string
+      responses:
+        '202':
+          description: Sign Out
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              data:
+                properties:
+                  code:
+                    example: '2001'
+                    type: string
+                  message:
+                    example: Sign out successfully
+                    type: string
+                  status:
+                    example: success
+                    type: string
+                type: object
+              message:
+                example: Accepted
+                type: string
+              statusCode:
+                example: 202
+                type: number
+            type: object
+      tags:
+        - Auth
+      description: Sign Out
+      operationId: signOut
+      summary: Sign Out
+  /api/v1/shop/signup:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: body
+          schema:
+            properties:
+              email:
+                example: 123@gmail.com
+                type: string
+              name:
+                example: '123'
+                type: string
+              password:
+                example: 123456@
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Sign Up
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Encoding:
+              type: string
+            Content-Security-Policy:
+              type: string
+            Cross-Origin-Opener-Policy:
+              type: string
+            Cross-Origin-Resource-Policy:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            Origin-Agent-Cluster:
+              type: string
+            Referrer-Policy:
+              type: string
+            Strict-Transport-Security:
+              type: string
+            Transfer-Encoding:
+              type: string
+            Vary:
+              type: string
+            X-Content-Type-Options:
+              type: string
+            X-DNS-Prefetch-Control:
+              type: string
+            X-Download-Options:
+              type: string
+            X-Frame-Options:
+              type: string
+            X-Permitted-Cross-Domain-Policies:
+              type: string
+            X-XSS-Protection:
+              type: string
+          schema:
+            properties:
+              code:
+                example: '2001'
+                type: string
+              data:
+                properties:
+                  shop:
+                    properties:
+                      _id:
+                        example: 65a7484d1e9aa65f31a6ac14
+                        type: string
+                      email:
+                        example: admin123@gmail.com
+                        type: string
+                      name:
+                        example: thanh trường
+                        type: string
+                    type: object
+                  tokens:
+                    properties:
+                      accessToken:
+                        example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE3NDg0ZDFlOWFhNjVmMzFhNmFjMTQiLCJwdWJsaWNLZXkiOiItLS0tLUJFR0lOIFBVQkxJQyBLRVktLS0tLVxuTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFtclMxekx6dldHOGFjQXBOTlB2M1xuMjFJUFVKWlZzRGlXYjhkV001eTdXaXQ1SmpWNllvSnNhVWt3dzIrelJRRlNzWWxSOXFYUmZ3UnNTVkw2WVBxd1xuaDFHcllYZlk1cUVwL1JYZDRESDdIemk5ZnlqMm0yemZCQWJlRmI0alhGbUIxb0FCZzNXeE1zYzRFQmRlS1NSc1xuckVwOUpjdHVUeDZwcGxvMWFYOUFjOWVrWWI5ejVXSnROZllTNm9yWDRaT2tKMnFFcnIwdVIyc1VQYU5ockRscFxuaXlWN2Y0Y0NxS2VPUkc0MnZjaVNKR1FnUFpOMm96ejc3SDdqQTZ5OFdKK0l5M0hJcGUwdnp2eWJmbFlSemxzaFxuSnpJU2tQRXJQam0vVFREMW9mOXZVVTNMSzFsZWNGTlVKYUZ5eHdIdUM4MG1IdTBCYUlHclJSYUNHTlhCTFk5SVxuWXdJREFRQUJcbi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLVxuIiwiaWF0IjoxNzA1NDYxODM3LCJleHAiOjE3MDU2MzQ2Mzd9.Lt8oyWtxAuxIEzzK0j0Rr7EtN0UqB66z_kwahQTqeu3zLibpHGZmldT_aYWq43o343yDOimWzwOM13MwFbE6xQjL4hQyyD7C5aGuugBwPT3RKoXElDB-adHXjAIog4O2ZLqxti9kgfftPtPQl0aORmEWLezQaBpIZuwdOzwnmgdJwyH_8ZXCWdSbtcLmBaTfd8Mtl6HvuGGNQ7iWYmRM0NBnPVsAjDb3EdX-dWDXVVeZidziRvjgBs5v_pYBo5i-sv_9HOXxLEpGKALQ2vaCMgvAkSvJwRjP6OIdiMIpzGAkJl-_qx7HQFrMFsA7_o9wD-1yiUxPXmKASVBpQcYXwA
+                        type: string
+                      refreshToken:
+                        example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE3NDg0ZDFlOWFhNjVmMzFhNmFjMTQiLCJwdWJsaWNLZXkiOiItLS0tLUJFR0lOIFBVQkxJQyBLRVktLS0tLVxuTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFtclMxekx6dldHOGFjQXBOTlB2M1xuMjFJUFVKWlZzRGlXYjhkV001eTdXaXQ1SmpWNllvSnNhVWt3dzIrelJRRlNzWWxSOXFYUmZ3UnNTVkw2WVBxd1xuaDFHcllYZlk1cUVwL1JYZDRESDdIemk5ZnlqMm0yemZCQWJlRmI0alhGbUIxb0FCZzNXeE1zYzRFQmRlS1NSc1xuckVwOUpjdHVUeDZwcGxvMWFYOUFjOWVrWWI5ejVXSnROZllTNm9yWDRaT2tKMnFFcnIwdVIyc1VQYU5ockRscFxuaXlWN2Y0Y0NxS2VPUkc0MnZjaVNKR1FnUFpOMm96ejc3SDdqQTZ5OFdKK0l5M0hJcGUwdnp2eWJmbFlSemxzaFxuSnpJU2tQRXJQam0vVFREMW9mOXZVVTNMSzFsZWNGTlVKYUZ5eHdIdUM4MG1IdTBCYUlHclJSYUNHTlhCTFk5SVxuWXdJREFRQUJcbi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLVxuIiwiaWF0IjoxNzA1NDYxODM3LCJleHAiOjE3MDYwNjY2Mzd9.BJ0EQG3LTTIIuN2pMu1zp9NqW3Li8JRXb1-oljwTGk2_EIHg30TtmI05yGxPbXeJLHmfmtFcoeylxLGFee6Uns884x4tSKldx4CmJy0OQ9B6wUCQHvaeyCwl4weqRu8NnHw8nPbxpUkpEoHRDUEp1gxt01rooanNmNzZVmNIgsKEQCAvFiiuNfNLyU_iN2UNX2wPrud1CyhRqv7uH7yJcAkQpkKxHVdLLBZe3xcVD_h6arN3XMdmPca4t8sxdJ08CeN05DND3pRSe5zGavHxzcUjsGSL8UfKhdBfcbch-WMBbaLWNJWtTouG05jIdyX2C4d-8BORo59yx64fAo0HYw
+                        type: string
+                    type: object
+                type: object
+              message:
+                example: Sign up successfully
+                type: string
+              staus:
+                example: success
+                type: string
+            type: object
+      tags:
+        - Auth
+      description: Sign Up
+      operationId: signUp
+      summary: Sign Up
+  /api/v1/upload:
+    post:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - format: binary
+          in: formData
+          name: file
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Upload Images
+      description: Upload simple use url
+      operationId: uploadSimpleUseUrl
+      summary: Upload simple use url
+  /api/v1/upload/multiple:
+    post:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: header
+          name: x-client-id
+          type: string
+        - format: binary
+          in: formData
+          name: files
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Upload Images
+      description: Upload muti file
+      operationId: uploadMutiFile
+      summary: Upload muti file
+tags:
+  - name: Auth
+  - name: Product
+  - name: Discount
+  - name: Shop
+  - name: User
+  - name: Cart
+  - name: Shop1
+  - name: Checkout
+  - name: Order
+  - name: Comment
+  - name: Upload Images
+  - name: Notification

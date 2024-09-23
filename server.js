@@ -4,7 +4,7 @@ dotenv.config()
 // const {
 //   app: { port },
 // } = require('./src/configs/config')
-const PORT = 3041
+const PORT = 3032
 
 const sever = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
